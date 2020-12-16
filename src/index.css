@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.text-2xs {
+    font-size: 0.6rem;
+    line-height: 0.75rem;
+}
+
+.torrent-button {
+    @apply border border-gray-400 rounded-lg p-2 py-1 h-8;
+    @apply transition-colors duration-150
+}

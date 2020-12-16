@@ -1,0 +1,9 @@
+{
+  "name": "seed-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "webtorrent": "^0.112.0"
+  }
+}
