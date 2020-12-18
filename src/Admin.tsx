@@ -88,7 +88,6 @@ function Admin({ user }) {
     //   const data = snapshot.val();
     //   console.log("🚀 ~ data", data)
 
-    //   setIsHost(data == user.uid);
     //   // updateStarCount(postElement, data);
     // });
     // return () => ref.off()

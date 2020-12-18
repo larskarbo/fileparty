@@ -40,7 +40,6 @@ function TorrentBoat({
   onFinish,
   torrent,
   onRemoveTorrent,
-  isHost,
   user,
 }) {
   const myRef = useRef(null);
@@ -117,7 +116,7 @@ function TorrentBoat({
 
         <div className="w-6 flex relative items-center justify-center">
           <DropdownMenu options={[
-            {name: "Delete", onClick: onDelete}
+            { name: "Delete", onClick: onDelete }
           ]} />
         </div>
         <div className="w-12 flex justify-center">
@@ -180,14 +179,10 @@ function TorrentBoat({
             <Button
               onClick={() => {
 
-                if (isHost) {
-                  if (playing) {
-                    onUnPlay()
-                  } else {
-                    onPlay();
-                  }
+                if (playing) {
+                  onUnPlay()
                 } else {
-                  alert("Only the host can set playback");
+                  onPlay();
                 }
               }}
               disabled={presentDisabled}
@@ -217,7 +212,7 @@ function TorrentBoat({
   );
 }
 
-const DropdownMenu = ({options}) => {
+const DropdownMenu = ({ options }) => {
 
   const [contextMenu, setContextMenu] = useState(false);
   const ref = useRef();
@@ -239,11 +234,11 @@ const DropdownMenu = ({options}) => {
         <div className="origin-top-right absolute left-8 top-0 mt-2 w-40 rounded-md shadow-xl bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
           <div className="py-1">
             {options.map(o => (
-              <button key={o.name} 
-              onClick={o.onClick}
-              className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
+              <button key={o.name}
+                onClick={o.onClick}
+                className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
                 {o.name}
-                </button>
+              </button>
 
             ))}
           </div>

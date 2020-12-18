@@ -67,16 +67,13 @@ function Board({ user }) {
   const [rawFiles, setRawFiles] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const [torrents, setTorrents] = useState([]);
-  const [isHost, setIsHost] = useState(false);
 
   const ref = useMemo(() => firebase.database().ref(`boards/${boardId}`), [
     boardId,
   ]);
   useBeforeUnload(evt => {
     /* Do some checks here if you like */
-    if (isHost) {
-      return "Are you sure you want to quit? You might lose the files you have added!"; // Suppress reload
-    }
+    return "Are you sure you want to quit? You might lose the files you have added!"; // Suppress reload
   });
 
   useEffect(() => {
@@ -92,13 +89,6 @@ function Board({ user }) {
 
       setFiles(data || {});
       setLoaded(true);
-      // updateStarCount(postElement, data);
-    });
-    ref.child("user").on("value", (snapshot) => {
-      const data = snapshot.val();
-      console.log("🚀 ~ data", data)
-
-      setIsHost(data == user.uid);
       // updateStarCount(postElement, data);
     });
     // return () => ref.off()
@@ -153,9 +143,6 @@ function Board({ user }) {
       <div className={"flex flex-col-reverse lg:flex-row flex-grow rounded bg-white  border border-gray-300 shadow-lg " + (isDragActive && "border-yellow-500 border-dashed")}>
         <div className="p-6 lg:w-96 rounded-l flex flex-col md:flex-row lg:flex-col">
           <div className="flex flex-col md:w-1/2 md:pr-8 lg:p-0 lg:w-full">
-            {isHost &&
-              <div className="font-normal">You are hosting this room</div>
-            }
             <div className="flex flex-row text-xs mb-3 mt-2">
               <div
                 className="bg-gray-100 p-2 flex flex-row text-gray-500
@@ -204,7 +191,6 @@ function Board({ user }) {
                     return torrent
                   }));
                 }}
-                isHost={isHost}
                 user={user}
                 file={file}
                 playingNow={playingNow}
@@ -340,14 +326,14 @@ const Feeback = () => {
     setText("")
     if (first) {
       setFirst(false)
-      fetch(`https://hooks.slack.com/services/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`, {
+      fetch(process.env.REACT_APP_FEEDBACK_ENDPOINT, {
         method: "POST",
         body: JSON.stringify({ text: mood + " Feedback: " + text })
       })
 
     } else {
       setFirst(true)
-      fetch(`https://hooks.slack.com/services/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`, {
+      fetch(process.env.REACT_APP_FEEDBACK_ENDPOINT, {
         method: "POST",
         body: JSON.stringify({ text: "Email: " + text })
       })
@@ -403,8 +389,8 @@ const PermSettings = () => {
           <li className="text-xs mb-3"><span className="p-1 rounded font-bold text-x text-blue-500 bg-blue-200">Anyone</span> can join</li>
           <li className="text-xs mb-3"><span className="p-1 rounded font-bold text-x text-blue-500 bg-blue-200">Anyone</span> can add files</li>
           <li className="text-xs mb-3"><span className="p-1 rounded font-bold text-x text-blue-500 bg-blue-200">Anyone</span> can download files</li>
-          <li className="text-xs mb-3"><span className="p-1 rounded font-bold text-x text-yellow-700 bg-yellow-200">Host</span> can delete files</li>
-          <li className="text-xs"><span className="p-1 rounded font-bold text-x text-yellow-700 bg-yellow-200">Host</span> can set playback</li>
+          <li className="text-xs mb-3"><span className="p-1 rounded font-bold text-x text-yellow-700 bg-yellow-200">Anyone</span> can delete files</li>
+          <li className="text-xs"><span className="p-1 rounded font-bold text-x text-yellow-700 bg-yellow-200">Anyone</span> can set playback</li>
 
         </ul>
       </div>}
