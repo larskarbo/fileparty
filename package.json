@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@craco/craco": "^5.9.0",
+    "@react-hook/hover": "^4.0.0",
     "@rehooks/local-storage": "^2.4.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -41,6 +42,7 @@
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "typescript": "^4.0.3",
     "use-before-unload": "^1.0.1",
+    "use-click-outside": "^2.0.0",
     "web-vitals": "^0.2.4",
     "webtorrent": "file:../__external__/webtorrent"
   },

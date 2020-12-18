@@ -17,8 +17,9 @@ import image from "./graphics/image-file.svg";
 import file from "./graphics/file-file.svg";
 import sendToPresenter from "./graphics/send-to-presenter.svg";
 import { ReactComponent as SendToPresenter } from "./graphics/send-to-presenter.svg";
-import presenter from "./graphics/present.svg";
 import classNames from "classnames";
+
+import useClickOutside from 'use-click-outside';
 
 const icons = {
   audio,
@@ -28,7 +29,6 @@ const icons = {
 };
 
 function TorrentBoat({
-  mainRef,
   itemKey,
   onSetTorrent,
   playingNow,
@@ -36,23 +36,17 @@ function TorrentBoat({
   onDelete,
   client,
   onPlay,
+  onUnPlay,
+  onFinish,
   torrent,
+  onRemoveTorrent,
   isHost,
   user,
 }) {
   const myRef = useRef(null);
   const [progress, setProgress] = useState(0);
   const [warningStale, setWarningStale] = useState(false);
-  const [startedDownloading, setStartedDownloading] = useState(
-    torrent?.progress == 1 || file.size < 1_000
-  );
-
-  // useEffect(() => {
-  //   if (playingNow?.key == itemKey && torrent) {
-  //     mainRef.current.innerHTML = "";
-  //     torrent.files[0].appendTo(mainRef.current);
-  //   }
-  // }, [playingNow, torrent]);
+  const [startedDownloading, setStartedDownloading] = useState(false);
 
   useEffect(() => {
     if (!startedDownloading) {
@@ -62,9 +56,7 @@ function TorrentBoat({
       console.log("torrent already exists");
       return;
     }
-    console.log("adding");
     client.add(file.magnet, function (torrent) {
-      console.log("added");
       onSetTorrent(torrent);
     });
   }, [startedDownloading]);
@@ -75,6 +67,10 @@ function TorrentBoat({
         setWarningStale(true)
       }, 4000)
       return () => clearTimeout(timeout)
+    } else {
+      if (warningStale) {
+        setWarningStale(false)
+      }
     }
   }, [startedDownloading, progress]);
 
@@ -82,29 +78,47 @@ function TorrentBoat({
     if (!torrent) {
       return;
     }
-    const interval = setInterval(() => {
+    console.log("adding bunch of handlers")
+    setProgress(torrent.progress);
+
+    //TODO debounce ↓
+    torrent.on('download', function () {
       setProgress(torrent.progress);
-    }, 1000);
-    return () => clearInterval(interval);
+    })
+    torrent.on('noPeers', function (announceType) {
+      console.log("no peers")
+    })
+    torrent.on('done', function () {
+      onFinish();
+    })
   }, [torrent]);
 
+  const reload = () => {
+    onRemoveTorrent()
+    setStartedDownloading(false)
+    setWarningStale(false)
+  }
+
   const presentDisabled = false;
+  const playing = playingNow?.key == itemKey
 
   return (
     <div
-      className={classNames("mt-4", warningStale && "border border-yellow-600 bg-yellow-50 py-2")}
+      className={classNames("py-2 rounded",
+        playing && "bg-gray-100",
+        warningStale && "border border-yellow-600 bg-yellow-50 py-2")}
       style={{
         marginLeft: -20,
         marginRight: -20,
         paddingRight: 10,
       }}
     >
-      <div className="flex flex-row">
-        
-        <div className="w-6 flex items-center justify-center">
-          <button className="border border-transparent hover:border-gray-400 rounded-lg p-1 m-auto">
-            <HiDotsVertical className="text-gray-500" />
-          </button>
+      <div className="flex h-12 flex-row">
+
+        <div className="w-6 flex relative items-center justify-center">
+          <DropdownMenu options={[
+            {name: "Delete", onClick: onDelete}
+          ]} />
         </div>
         <div className="w-12 flex justify-center">
           <img src={icons[file.type]} />
@@ -119,19 +133,22 @@ function TorrentBoat({
               }}
               className={
                 "text-xs overflow-x-hidden whitespace-nowrap text-gray-600"
+                // + (playing && " font-bold")
               }
             >
               {file.name}
             </div>
           </div>
           <div>
-            <span className="p-1 px-2 rounded-xl uppercase font-bold bg-gray-100 text-2xs text-gray-400">
+            <span className={"p-1 px-2 rounded-xl uppercase font-bold  text-2xs text-gray-400 "
+              + (playing ? "bg-gray-200" : "bg-gray-100")
+            }>
               {file.type}
             </span>
           </div>
         </div>
         <div className=" flex  flex-row text-center justify-end items-center">
-          {progress < 1 &&
+          {!torrent?.done &&
             <>
               {startedDownloading ? (
                 <Button
@@ -159,19 +176,27 @@ function TorrentBoat({
                 )}
             </>
           }
-          {progress == 1 &&
+          {torrent?.done &&
             <Button
               onClick={() => {
+
                 if (isHost) {
-                  onPlay();
+                  if (playing) {
+                    onUnPlay()
+                  } else {
+                    onPlay();
+                  }
                 } else {
                   alert("Only the host can set playback");
                 }
               }}
               disabled={presentDisabled}
-              className="ml-2"
+              inverted={playing}
+              className={classNames("ml-2", playing && "bg-gray-600")}
             >
               <SendToPresenter
+                fill={playing ? "white" : "black"}
+                stroke={playing ? "white" : "black"}
                 className={classNames(
                   "w-5 h-5 mr-1 max-w-none ",
                   presentDisabled && "opacity-50"
@@ -182,18 +207,55 @@ function TorrentBoat({
         </div>
       </div>
       {warningStale &&
-      <div className="overflow-x-hidden pl-2 pt-2  text-2xs w-full">
-        
-        <AiFillWarning className="inline text-yellow-700" /> Can’t seem to find any peers to download this file from.
-        <button className="underline font-bold">Reload torrent ↻</button>
-      </div>
+        <div className="overflow-x-hidden pl-2 pt-2  text-2xs w-full text-gray-700">
+
+          <AiFillWarning className="inline text-yellow-700 " /> Can’t seem to find any peers to download this file from.{" "}
+          <button onClick={reload} className="underline font-bold">Reset torrent ↻</button>
+        </div>
       }
     </div>
   );
 }
 
+const DropdownMenu = ({options}) => {
+
+  const [contextMenu, setContextMenu] = useState(false);
+  const ref = useRef();
+  useClickOutside(ref, () => setContextMenu(false));
+
+  return (
+    <>
+      <button
+        ref={ref}
+        onMouseDown={() => {
+          setContextMenu(!contextMenu)
+        }}
+        className={"border border-transparent hover:border-gray-400 rounded-sm p-1 m-auto " + (contextMenu && "bg-gray-700")}>
+        <HiDotsVertical className={contextMenu ? "text-white" : "text-gray-500"} />
+      </button>
+      {
+        contextMenu &&
+
+        <div className="origin-top-right absolute left-8 top-0 mt-2 w-40 rounded-md shadow-xl bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+          <div className="py-1">
+            {options.map(o => (
+              <button key={o.name} 
+              onClick={o.onClick}
+              className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
+                {o.name}
+                </button>
+
+            ))}
+          </div>
+        </div>
+      }
+    </>
+  )
+}
+
 const Button = ({
   disabled = false,
+  inverted = false,
   className = "",
   progress = null,
   children,
@@ -205,7 +267,8 @@ const Button = ({
       className={classNames(
         "relative torrent-button",
         disabled && "bg-gray-100",
-        !disabled && "bg-white hover:bg-gray-100 shadow",
+        !disabled && "bg-white  shadow",
+        (!inverted && !disabled) && "hover:bg-gray-100",
         className
       )}
     >

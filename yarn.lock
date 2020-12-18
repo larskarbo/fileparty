@@ -1806,6 +1806,25 @@
   resolved "https://registry.yarnpkg.com/@reach/observe-rect/-/observe-rect-1.2.0.tgz#d7a6013b8aafcc64c778a0ccb83355a11204d3b2"
   integrity sha512-Ba7HmkFgfQxZqqaeIWWkNK0rEhpxVQHIoVyW1YDSkGsGIXzcaW4deC8B0pZrNSSyLTdIk7y+5olKt5+g0GmFIQ==
 
+"@react-hook/event@^1.2.1":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@react-hook/event/-/event-1.2.3.tgz#cfe86d5cf36f53e85b367ff619990d001b5c82ae"
+  integrity sha512-WMBwLnYY2rubLeecsi4skl1imfx0oiXTgazV/1ByPT6WkmLvxUao3hC+mxps5D/+JK4Fq3uG9OWU/dn5jMtXyg==
+  dependencies:
+    "@react-hook/passive-layout-effect" "^1.2.0"
+
+"@react-hook/hover@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@react-hook/hover/-/hover-4.0.0.tgz#8a4b147cbf4857d01695c0ca94cdd62ef81e6f9d"
+  integrity sha512-uBBXWte0f4ywxsleyTG2FzZRPqR7X2Dxa8tcCE24ZPzWNXXcToicFHunKVnSKMsVq6wzi8F0MZ1/KJ1XdorAjw==
+  dependencies:
+    "@react-hook/event" "^1.2.1"
+
+"@react-hook/passive-layout-effect@^1.2.0":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@react-hook/passive-layout-effect/-/passive-layout-effect-1.2.1.tgz#c06dac2d011f36d61259aa1c6df4f0d5e28bc55e"
+  integrity sha512-IwEphTD75liO8g+6taS+4oqz+nnroocNfWVHWz7j+N+ZO2vYrc6PV1q7GQhuahL0IOR7JccFTsFKQ/mb6iZWAg==
+
 "@rehooks/local-storage@^2.4.0":
   version "2.4.0"
   resolved "https://registry.npmjs.org/@rehooks/local-storage/-/local-storage-2.4.0.tgz"
@@ -13158,6 +13177,11 @@ use-before-unload@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/use-before-unload/-/use-before-unload-1.0.1.tgz#fab39f068081a464b21959da9885341053060298"
   integrity sha512-HfISqBwjmSVLpc7jIhbTwh37jVaGaReiagn8bpyA7A0k6zDLxFkTtPZWcXzeVgs/B5sPZxc6h6fDuelvnHor3A==
+
+use-click-outside@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/use-click-outside/-/use-click-outside-2.0.0.tgz#87a60baab538e91e8ae15c21caad29edf9cd034e"
+  integrity sha512-sUDWeFbpzFrjtSX0NfBk8EsDs+qWbI/fW5RfSnQl1nX6RIiHC48/JZtEdlgCyszBqRUPdkIBBP7zD3K/9sg5PQ==
 
 use@^3.1.0:
   version "3.1.1"

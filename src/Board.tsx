@@ -17,6 +17,9 @@ import useBeforeUnload from "use-before-unload"
 import firebase from "firebase/app";
 import TorrentAdder from "./TorrentAdder";
 import prettyBytes from 'pretty-bytes';
+import Media from './Media';
+import classNames from 'classnames';
+import { AiOutlineBulb, AiOutlineFrown, AiOutlineSmile } from "react-icons/ai";
 
 export interface File {
   id: number;
@@ -41,7 +44,7 @@ function Board({ user }) {
 
   const [downloadSpeed, setDownloadSpeed] = useState(0);
   const [uploadSpeed, setUploadSpeed] = useState(0);
-  
+
   useEffect(() => {
     if (!client) {
       return;
@@ -65,7 +68,6 @@ function Board({ user }) {
   const [loaded, setLoaded] = useState(false);
   const [torrents, setTorrents] = useState([]);
   const [isHost, setIsHost] = useState(false);
-  const mainRef = useRef();
 
   const ref = useMemo(() => firebase.database().ref(`boards/${boardId}`), [
     boardId,
@@ -80,9 +82,9 @@ function Board({ user }) {
   useEffect(() => {
     // setLoaded(false);
 
-    
+
     ref.child('counter')
-    .set(firebase.database.ServerValue.increment(1))
+      .set(firebase.database.ServerValue.increment(1))
 
 
     ref.child("items").on("value", (snapshot) => {
@@ -108,16 +110,22 @@ function Board({ user }) {
       const data = snapshot.val();
 
       setPlayingNow(data);
+      console.log(torrents)
     });
     // return () => ref.off()
   }, [boardId]);
 
 
+
+
   const onDrop = useCallback(acceptedFiles => {
+    // console.log("🚀 ~ acceptedFiles", ))
+    const aFiles = [...Array.from(acceptedFiles)]
+    // return
     // Do something with the files
     setRawFiles((rawFiles) => [
       ...rawFiles,
-      ...[...acceptedFiles].map((df) => ({
+      ...aFiles.map((df) => ({
         file: df,
         id: Math.round(Math.random() * 100000),
       })),
@@ -126,111 +134,170 @@ function Board({ user }) {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
+  const removeTorrent = (magnet) => {
+    client.remove(magnet)
+    setTorrents(torrents.filter(
+      ({ magnetURI }) => magnet != magnetURI
+    ));
+  }
+
+  const removeTorrentByInfoHash = (infoHashToDelete) => {
+    client.remove(infoHashToDelete)
+    setTorrents(torrents.filter(
+      ({ infoHash }) => infoHashToDelete != infoHash
+    ));
+  }
 
   return (
-    <div className={"flex flex-grow rounded bg-white  border border-gray-300 shadow-lg " + (isDragActive && "border-yellow-500 border-dashed")}>
-      <div className="p-6 w-100 rounded-l flex justify-between flex-col">
-        <div>
-          {isHost &&
-            <div className="font-normal">You are hosting this room</div>
-          }
-          <div className="flex flex-row text-xs mb-3 mt-2">
-            <div
-              className="bg-gray-100 p-2 flex flex-row text-gray-500
+    <>
+      <div className={"flex flex-col-reverse lg:flex-row flex-grow rounded bg-white  border border-gray-300 shadow-lg " + (isDragActive && "border-yellow-500 border-dashed")}>
+        <div className="p-6 lg:w-96 rounded-l flex flex-col md:flex-row lg:flex-col">
+          <div className="flex flex-col md:w-1/2 md:pr-8 lg:p-0 lg:w-full">
+            {isHost &&
+              <div className="font-normal">You are hosting this room</div>
+            }
+            <div className="flex flex-row text-xs mb-3 mt-2">
+              <div
+                className="bg-gray-100 p-2 flex flex-row text-gray-500
             border-t border-b border-l rounded-l
             "
-            >
-              <FaLink className="ml-0 m-auto" />
-            </div>
-            <input
-              className=" p-2 border-t border-b flex flex-grow"
-              type="text"
-              value={link}
-              onChange={() => { }}
-            />
-            <button
-              onClick={setCopied}
-              className="bg-gray-0 p-2 flex flex-row text-gray-500
+              >
+                <FaLink className="ml-0 m-auto" />
+              </div>
+              <input
+                className=" p-2 border-t border-b flex flex-grow"
+                type="text"
+                value={link}
+                onChange={() => { }}
+              />
+              <button
+                onClick={setCopied}
+                className="bg-gray-0 p-2 flex flex-row text-gray-500
             border-t border-b border-r border-l rounded-r"
-            >
-              copy{" "}
-              {isCopied ? (
-                <FaCheck className="ml-1 m-auto" />
-              ) : (
-                  <FaCopy className="ml-1 m-auto" />
+              >
+                copy{" "}
+                {isCopied ? (
+                  <FaCheck className="ml-1 m-auto" />
+                ) : (
+                    <FaCopy className="ml-1 m-auto" />
+                  )}
+              </button>
+            </div>
+
+            <PermSettings />
+
+          </div>
+          <div className="flex flex-col justify-start md:w-1/2 lg:w-full">
+            <h2 className="text-xl font-semibold">Files</h2>
+            {Object.entries(files).map(([key, file]: [string, any]) => (
+              <TorrentBoat
+                key={key}
+                itemKey={key}
+                torrent={torrents.find(
+                  ({ magnetURI }) => file.magnet == magnetURI
                 )}
-            </button>
+                onFinish={() => {
+                  setTorrents(torrents.map(torrent => {
+                    if (file.magnet == torrent.magnetURI) {
+                      torrent.done = true
+                    }
+                    return torrent
+                  }));
+                }}
+                isHost={isHost}
+                user={user}
+                file={file}
+                playingNow={playingNow}
+                client={client}
+                onSetTorrent={(torrent) => {
+                  setTorrents([...torrents, torrent]);
+                }}
+                onRemoveTorrent={() => removeTorrent(file.magnet)}
+                onDelete={(torrent) => {
+                  try {
+                    client.remove(file.magnet)
+                  } catch (_) { }
+                  ref.child("items").child(key).remove();
+                  if (playingNow.key == key) {
+                    ref.child("playingNow").set({})
+                  }
+                }}
+                onPlay={() => {
+                  ref.child("playingNow").set({
+                    key,
+                    state: "paused",
+                    position: 0
+                  });
+                }}
+                onUnPlay={() => {
+                  ref.child("playingNow").set(null);
+                }}
+              />
+            ))}
+            {rawFiles.map((rf) => (
+              <TorrentAdder
+                client={client}
+                rawFile={rf}
+                key={rf.id}
+                onDestroy={() => {
+                  setRawFiles((rawFiles) =>
+                    rawFiles.filter((r) => r.id != rf.id)
+                  );
+                }}
+                onRemoveTorrentByInfoHash={(infoHash) => removeTorrentByInfoHash(infoHash)}
+                onSetTorrent={(torrent) => {
+                  // check if it already exists
+                  console.log(torrent.magnetURI)
+                  // files.forEach(t => console.log("mur", t.magnetURI))
+                  console.log("files", files)
+
+                  setTorrents([...torrents, torrent]);
+                  if (!Object.values(files).find((f: any) => f.magnet == torrent.magnetURI)) {
+                    const newItemRef = ref.child("items").push();
+                    newItemRef.set({
+                      name: rf.file.name,
+                      magnet: torrent.magnetURI,
+                      size: rf.file.size,
+                      type: whichType(rf.file),
+                      user: user.uid
+                    });
+                  }
+                  setRawFiles((rawFiles) =>
+                    rawFiles.filter((r) => r.id != rf.id)
+                  );
+                }}
+              />
+            ))}
+
+            <div {...getRootProps()} className={"mt-12 text-xs h-24 flex flex-col justify-center border-2 border-dashed border-gray-200 rounded-xl p-3 text-gray-600 bg-gray-100 " + (isDragActive && " border-yellow-500")}>
+              <input {...getInputProps()} />
+              {
+                isDragActive ?
+                  <p>Drop the files to add them ...</p> :
+
+                  <>
+                    <p>Drag and drop <strong>images</strong>, <strong>audio</strong>, <strong>video</strong> or other files here, or click to select</p>
+                  </>
+              }
+            </div>
+
+
           </div>
 
-          <PermSettings />
-          <h2 className="text-xl font-semibold">Files</h2>
-          {Object.entries(files).map(([key, file]: [string, any]) => (
-            <TorrentBoat
-              mainRef={mainRef}
-              key={key}
-              itemKey={key}
-              torrent={torrents.find(
-                ({ magnetURI }) => file.magnet == magnetURI
-              )}
-              isHost={isHost}
-              user={user}
-              file={file}
-              playingNow={playingNow}
-              client={client}
-              onSetTorrent={(torrent) => {
-                setTorrents([...torrents, torrent]);
-              }}
-              onDelete={(torrent) => {
-                client.remove(file.magnet)
-                ref.child("items").child(key).remove();
-              }}
-              onPlay={() => {
-                ref.child("playingNow").set({
-                  key,
-                });
-              }}
-            />
-          ))}
-          {rawFiles.map((rf) => (
-            <TorrentAdder
-              client={client}
-              rawFile={rf}
-              key={rf.id}
-              onDestroy={() => {
-                setRawFiles((rawFiles) =>
-                  rawFiles.filter((r) => r.id != rf.id)
-                );
-              }}
-              onSetTorrent={(torrent) => {
-                setTorrents([...torrents, torrent]);
-                const newItemRef = ref.child("items").push();
-                console.log("🚀 ~ rf.file", rf.file)
-                console.log("🚀 ~ torrent", torrent)
-                newItemRef.set({
-                  name: rf.file.name,
-                  magnet: torrent.magnetURI,
-                  size: rf.file.size,
-                  type: whichType(rf.file),
-                  user: user.uid
-                });
-                setRawFiles((rawFiles) =>
-                  rawFiles.filter((r) => r.id != rf.id)
-                );
-              }}
-            />
-          ))}
-
-          <div {...getRootProps()}  className={"mt-12 text-sm h-24 border-4 border-dashed border-gray-200 rounded-xl p-3 text-gray-600 bg-gray-100 " + (isDragActive &&" border-yellow-500")}>
-            <input {...getInputProps()} />
-            {
-              isDragActive ?
-                <p>Drop the files to add them ...</p> :
-                <p>Drag and drop files here, or click to select</p>
-            }
-          </div>
         </div>
 
-        <div className="text-xs text-gray-700">
+        <Media playingNow={playingNow} torrents={torrents} files={files}
+          onSetPlayingNow={(obj) => {
+            ref.child("playingNow").set({
+              ...playingNow,
+              ...obj
+            });
+          }}
+        />
+      </div>
+      <div className="flex flex-col-reverse lg:flex-row justify-between pt-5 pb-6 ">
+
+        <div className=" ml-2 text-xs pr-4 text-gray-700 opacity-80">
           Powered by{" "}
           <a
             target="_blank"
@@ -238,47 +305,88 @@ function Board({ user }) {
             href="https://webtorrent.io/"
           >
             WebTorrent
-          </a>{" "}
-            <FaDownload className="inline m-auto mr-1" size={8} />{" "}
-            {downloadSpeed ? prettyBytes(downloadSpeed) + "/s " : "- "}
-            <FaUpload className="inline m-auto mx-1" size={8} />{" "}
-            {uploadSpeed ? prettyBytes(uploadSpeed) + "/s " : "- "}
-          | By{" "}
+            </a>{" "}(
+              <FaDownload className="inline m-auto" size={8} />{" "}
+          {prettyBytes(downloadSpeed || 0) + "/s "}
+          <FaUpload className="inline m-auto" size={8} />{" "}
+          {prettyBytes(uploadSpeed || 0) + "/s) "}
+            | By{" "}
           <a
             target="_blank"
             className=" text-blue-600"
             href="https://larskarbo.no"
           >
             larskarbo
-          </a>
+            </a>
         </div>
+        <Feeback />
       </div>
-      <div
-        ref={mainRef}
-        className="flex justify-center  rounded-r flex-grow bg-gray-200"
-      >
-        <div className="flex flex-col  w-full text-center align-middle justify-center">
-
-          <div className="bg-gray-800 w-full" style={{
-            backgroundColor: "#4B4B4B"
-          }}>
-            <div className="h-64 flex items-center justify-center">
-              
-              <div className="font-light text-2xs text-gray-100">
-                The host controls this presenter screen 
-              </div>
-            </div>
-            <div className="h-8 border-t border-gray-100">
-              
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </>
   );
 }
 
 export default Board;
+
+
+const moods = ["🙂", "👺", "💡"]
+const Feeback = () => {
+  const [mood, setMood] = useState(moods[0])
+  const [text, setText] = useState("")
+  const [isFocus, setIsFocus] = useState(false)
+  const [first, setFirst] = useState(true)
+
+  const onSubmit = e => {
+    e.preventDefault()
+    setText("")
+    if (first) {
+      setFirst(false)
+      fetch(`https://hooks.slack.com/services/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`, {
+        method: "POST",
+        body: JSON.stringify({ text: mood + " Feedback: " + text })
+      })
+
+    } else {
+      setFirst(true)
+      fetch(`https://hooks.slack.com/services/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`, {
+        method: "POST",
+        body: JSON.stringify({ text: "Email: " + text })
+      })
+    }
+  }
+
+  return <div className="bg-white max-w-2xl mb-2 font-light text-gray-600 flex-grow h-6 flex overflow-hidden text-xs items-center rounded-lg border border-gray-300 w-full ">
+    {!first &&<div className="px-3 py-1 bg-gray-100  ">
+      {first ? "How do you feel?" : "Thanks! Put your email I'll get back to you:"}
+    </div>}
+    {first && moods.map((m, i) => (
+      <button key={m} className={classNames("px-2   border-gray-300 h-full",
+        mood == m && "bg-gray-100",
+        i!=0&&"border-l"
+      )}
+        onClick={(e) => { setMood(m) }}
+      >
+        {m == "🙂" && <AiOutlineSmile />}
+        {m == "👺" && <AiOutlineFrown />}
+        {m == "💡" && <AiOutlineBulb />}
+      </button>
+
+    ))}
+
+    <form onSubmit={onSubmit} className="flex flex-grow h-full relative border-l  border-gray-300 ">
+      <input
+        onFocus={() => setIsFocus(true)}
+        onBlur={() => setTimeout(() => setIsFocus(false), 300)}
+        value={text} onChange={(e) => setText(e.target.value)}
+        className="w-full h-full pl-2" placeholder={first ? "Type instant feedback..." : "you@example.com"} type="text" />
+      {(text.length > 0 && isFocus) &&
+        <button type="submit" onClick={onSubmit} className="whitespace-nowrap bg-blue-200 rounded-l-lg  px-3 py-0 text-blue-700" >
+          {isFocus ? "Press enter to send" : "Send"}
+        </button>
+
+      }
+    </form>
+  </div>
+}
 
 const PermSettings = () => {
 
@@ -303,12 +411,14 @@ const PermSettings = () => {
   </>
 }
 
-const whichType=(file)=> {
-  if(file.type.includes("video")){
+
+
+const whichType = (file) => {
+  if (file.type.includes("video")) {
     return "video"
-  } else if(file.type.includes("image")){
+  } else if (file.type.includes("image")) {
     return "image"
-  } else if(file.type.includes("audio")){
+  } else if (file.type.includes("audio")) {
     return "audio"
   } else {
     return "file"

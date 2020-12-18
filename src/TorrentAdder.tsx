@@ -3,18 +3,30 @@ import { FaDownload, FaUpload } from "react-icons/fa";
 import WebTorrent from "webtorrent";
 import prettyBytes from "pretty-bytes"
 
-function TorrentAdder({ rawFile,  client, onSetTorrent, onDestroy }) {
+function TorrentAdder({ rawFile,  client, onSetTorrent, onDestroy, onRemoveTorrentByInfoHash }) {
 
   useEffect(() => {
     if (rawFile) {
-      client.seed([rawFile.file], {}, function (torrent) {
+      console.log("🚀 ~ rawFile.file", rawFile.file)
+      client.seed([rawFile.file], {name: rawFile.file.name}, function (torrent) {
         console.log("🚀 ~ torrent", torrent)
         onSetTorrent(torrent);
       }, function(torrent){
         torrent.on("error", function(err) {
           if(err.message.includes("duplicate")){
-            alert("Can't add duplicate file")
-            onDestroy()
+            const infoHash = err.message.split("Cannot add duplicate torrent ")[1]
+            console.log("🚀 ~ infoHash", infoHash)
+            onRemoveTorrentByInfoHash(infoHash)
+            // if(client.torrents.find(t=> t.magnetURI))
+            //try again
+            client.seed([rawFile.file], {name: rawFile.file.name}, function (torrent) {
+              console.log("🚀 ~ torrent", torrent)
+              onSetTorrent(torrent);
+            }, function(torrent){
+              onDestroy()
+            })
+
+            
           } else {
             console["log"]("error!", err.message)
 

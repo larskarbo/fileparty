@@ -9,5 +9,13 @@
 
 .torrent-button {
     @apply border border-gray-400 rounded-lg p-2 py-1 h-8;
-    @apply transition-colors duration-150
+    @apply transition-colors duration-150;
+}
+
+.h-xs {
+    height:2px;
+}
+
+input, button {
+    @apply focus:outline-none;
 }

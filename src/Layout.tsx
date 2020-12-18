@@ -6,7 +6,7 @@ import logo from "./logo.svg"
 function Layout({children}) {
 
   return (
-    <div className="flex flex-col bg-gradient-to-tr  from-gray-100 pt-0 to-yellow-50 flex-grow h-screen p-12"
+    <div className="flex flex-col bg-gradient-to-tr  from-gray-100 pt-0 to-yellow-50 flex-grow min-h-screen p-2 md:p-12"
     //  {...getRootProps()}
     >
       <div className=" py-4">
