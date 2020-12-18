@@ -389,8 +389,8 @@ const PermSettings = () => {
           <li className="text-xs mb-3"><span className="p-1 rounded font-bold text-x text-blue-500 bg-blue-200">Anyone</span> can join</li>
           <li className="text-xs mb-3"><span className="p-1 rounded font-bold text-x text-blue-500 bg-blue-200">Anyone</span> can add files</li>
           <li className="text-xs mb-3"><span className="p-1 rounded font-bold text-x text-blue-500 bg-blue-200">Anyone</span> can download files</li>
-          <li className="text-xs mb-3"><span className="p-1 rounded font-bold text-x text-yellow-700 bg-yellow-200">Anyone</span> can delete files</li>
-          <li className="text-xs"><span className="p-1 rounded font-bold text-x text-yellow-700 bg-yellow-200">Anyone</span> can set playback</li>
+          <li className="text-xs mb-3"><span className="p-1 rounded font-bold text-x text-blue-500 bg-blue-200">Anyone</span> can delete files</li>
+          <li className="text-xs"><span className="p-1 rounded font-bold text-x text-blue-500 bg-blue-200">Anyone</span> can set playback</li>
 
         </ul>
       </div>}
