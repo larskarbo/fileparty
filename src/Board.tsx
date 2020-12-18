@@ -400,13 +400,18 @@ const PermSettings = () => {
 
 
 const whichType = (file) => {
+console.log("🚀 ~ file", file)
   if (file.type.includes("video")) {
     return "video"
   } else if (file.type.includes("image")) {
     return "image"
   } else if (file.type.includes("audio")) {
     return "audio"
-  } else {
+  } 
+  // else if (file.type == "application/pdf") {
+  //   return "pdf"
+  // } 
+  else {
     return "file"
   }
 }

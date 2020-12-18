@@ -6,7 +6,7 @@ import { ReactComponent as Present } from "./graphics/present.svg";
 import { ReactComponent as SendToPresenter } from "./graphics/send-to-presenter.svg";
 import Timeline from './Timeline/Timeline';
 
-type mediaType = "no-media" | "video" | "image" | "audio" | "file" | "not-loaded"
+type mediaType = "no-media" | "video" | "image" | "audio" | "file" | "pdf" | "not-loaded"
 
 function Media({ onSetPlayingNow, playingNow, torrents, files }) {
   let history = useHistory();
@@ -14,18 +14,19 @@ function Media({ onSetPlayingNow, playingNow, torrents, files }) {
   const imageRef = useRef();
   const videoRef = useRef();
   const audioRef = useRef();
-  const fileRef = useRef();
+  const pdfRef = useRef();
   const refs = {
     image: imageRef,
     audio: audioRef,
-    video: videoRef
+    video: videoRef,
+    pdf: pdfRef
   }
   const [mediaType, setMediaType] = useState<mediaType>("no-media")
   const [element, setElement] = useState(null)
   const [currentFile, setCurrentFile] = useState(null)
 
   const file = files[playingNow?.key]
-  const torrent = torrents?.find(t => file.magnet == t.magnetURI)
+  const torrent = torrents?.find(t => file?.magnet == t.magnetURI)
 
   useEffect(() => {
     // setLoaded(false);
@@ -75,18 +76,21 @@ function Media({ onSetPlayingNow, playingNow, torrents, files }) {
     if (!currentFile) {
       return
     }
-    const element = refs[currentFile.type]?.current
-    console.log("🚀 ~ element", element)
-    element.currentTime = (playingNow.position / 1000)
-    if (playingNow.state == "playing") {
-      if (element.paused) {
-        console.log("attempting to play")
-        element.play()
-      }
-    } else if (playingNow.state == "paused") {
-      if (!element.paused) {
-        console.log("attempting to pause")
-        element.pause()
+    if(currentFile.type == "video" || currentFile.type == "audio"){
+
+      const element = refs[currentFile.type]?.current
+      console.log("🚀 ~ element", element)
+      element.currentTime = (playingNow.position / 1000)
+      if (playingNow.state == "playing") {
+        if (element.paused) {
+          console.log("attempting to play")
+          element.play()
+        }
+      } else if (playingNow.state == "paused") {
+        if (!element.paused) {
+          console.log("attempting to pause")
+          element.pause()
+        }
       }
     }
     // mainRef.current
@@ -160,7 +164,7 @@ function Media({ onSetPlayingNow, playingNow, torrents, files }) {
                 />
               </div>
               <div>
-                The host controls this presenter screen
+                The presenter screen is currently empty
               </div>
             </div>
             <img
@@ -181,6 +185,13 @@ function Media({ onSetPlayingNow, playingNow, torrents, files }) {
               ref={audioRef}
               className={classNames(
                 (mediaType != "audio") && "hidden",
+                ""
+              )}
+            />
+            <iframe
+              ref={pdfRef}
+              className={classNames(
+                (mediaType != "pdf") && "hidden",
                 ""
               )}
             />
