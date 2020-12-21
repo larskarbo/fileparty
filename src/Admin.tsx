@@ -5,13 +5,11 @@ import React, {
 } from "react";
 
 
-import { useParams } from "react-router";
 import firebase from "firebase/app";
 import moment from "moment";
 import Chart from "react-google-charts";
 
 function Admin({ user }) {
-  const { boardId }: any = useParams();
   const [data, setData] = useState([]);
   const [featuredBoards, setFeaturedBoards] = useState(null);
   const [stats, setStats] = useState(null);
@@ -91,7 +89,7 @@ function Admin({ user }) {
     //   // updateStarCount(postElement, data);
     // });
     // return () => ref.off()
-  }, [boardId]);
+  }, []);
 
   console.log("🚀 ~ stats", stats)
   if (!stats || !featuredBoards) {

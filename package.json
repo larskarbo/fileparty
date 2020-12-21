@@ -11,6 +11,7 @@
     "@testing-library/user-event": "^12.1.10",
     "@types/jest": "^26.0.15",
     "@types/node": "^12.0.0",
+    "@types/reach__router": "^1.3.6",
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
     "autoprefixer": "^9",
@@ -22,6 +23,16 @@
     "faunadb": "^4.0.0",
     "firebase": "^8.1.2",
     "firebase-admin": "^9.4.2",
+    "fs": "^0.0.1-security",
+    "gatsby": "^2.29.1",
+    "gatsby-plugin-canonical-urls": "^2.7.0",
+    "gatsby-plugin-google-analytics": "^2.8.0",
+    "gatsby-plugin-manifest": "^2.9.0",
+    "gatsby-plugin-postcss": "^3.4.0",
+    "gatsby-plugin-react-helmet": "^3.7.0",
+    "gatsby-plugin-sharp": "^2.11.1",
+    "gatsby-source-filesystem": "^2.8.0",
+    "gatsby-transformer-sharp": "^2.9.0",
     "ky": "^0.25.1",
     "moment": "^2.29.1",
     "node-sass": "^5.0.0",
@@ -34,8 +45,8 @@
     "react-dom": "^17.0.1",
     "react-dropzone": "^11.2.4",
     "react-google-charts": "^3.0.15",
+    "react-helmet": "^6.1.0",
     "react-icons": "^4.1.0",
-    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "react-use-clipboard": "^1.0.2",
     "serverless-http": "^2.6.0",
@@ -47,10 +58,8 @@
     "webtorrent": "larskarbo/webtorrent#master"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "CI= craco build",
-    "test": "craco test",
-    "eject": "react-scripts eject"
+    "start": "gatsby develop",
+    "build": "gatsby build"
   },
   "eslintConfig": {
     "extends": [
@@ -71,6 +80,5 @@
     ]
   },
   "devDependencies": {
-    "@types/react-router-dom": "^5.1.6"
   }
 }

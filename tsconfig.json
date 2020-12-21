@@ -23,5 +23,5 @@
   },
   "include": [
     "src"
-  ]
+, "gatsby/src/pages/Intro.tsx", "gatsby-node.js"  ]
 }
