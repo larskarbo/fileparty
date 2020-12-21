@@ -25,6 +25,7 @@
     "firebase-admin": "^9.4.2",
     "fs": "^0.0.1-security",
     "gatsby": "^2.29.1",
+    "gatsby-image": "^2.8.0",
     "gatsby-plugin-canonical-urls": "^2.7.0",
     "gatsby-plugin-google-analytics": "^2.8.0",
     "gatsby-plugin-manifest": "^2.9.0",
@@ -48,6 +49,8 @@
     "react-helmet": "^6.1.0",
     "react-icons": "^4.1.0",
     "react-scripts": "4.0.1",
+    "react-share": "^4.3.1",
+    "react-use": "^15.3.4",
     "react-use-clipboard": "^1.0.2",
     "serverless-http": "^2.6.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
@@ -79,6 +82,5 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }
