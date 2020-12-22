@@ -8,7 +8,7 @@ function TorrentAdder({ rawFile,  client, onSetTorrent, onDestroy, onRemoveTorre
   useEffect(() => {
     if (rawFile) {
       console.log("🚀 ~ rawFile.file", rawFile.file)
-      client.seed([rawFile.file], {name: rawFile.file.name, announce: ["ws://localhost:2468"]}, function (torrent) {
+      client.seed([rawFile.file], {name: rawFile.file.name, announce: ["ws://piclox.larskarbo.no:2468"]}, function (torrent) {
         console.log("🚀 ~ torrent", torrent)
         onSetTorrent(torrent);
       }, function(torrent){
