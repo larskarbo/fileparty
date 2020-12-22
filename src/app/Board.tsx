@@ -32,12 +32,12 @@ export interface File {
 
 function setUpClient() {
   const client = new WebTorrent({
-    // tracker: {
+    tracker: {
     //     // infoHash: new Buffer('012345678901234567890'), // hex string or Buffer
     //     // peerId: new Buffer('01234567890123456789'), // hex string or Buffer
-    //     announce: ['ws://localhost:2468'], // list of tracker server urls
+        announce: ["wss://tracker.fileparty.co"], // list of tracker server urls
     //     // port: 2468 // torrent client port, (in browser, optional)
-    // },
+    },
     dht: false,
     webSeeds: false
   })

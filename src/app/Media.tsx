@@ -6,6 +6,7 @@ import Timeline from './Timeline/Timeline';
 
 type mediaType = "no-media" | "video" | "image" | "audio" | "file" | "pdf" | "not-loaded"
 
+let playVirginityTaken = false
 function Media({ onSetPlayingNow, playingNow, torrents, files }) {
   const imageRef = useRef();
   const videoRef = useRef();
@@ -87,9 +88,22 @@ function Media({ onSetPlayingNow, playingNow, torrents, files }) {
           element.play()
         }
       } else if (playingNow.state == "paused") {
-        if (!element.paused) {
+        if (!playVirginityTaken) {
+          element.play()
+          setTimeout(() => {
+            element.pause()
+            element.currentTime = 0
+          }, 20)
+          playVirginityTaken = true
+        } else if (!element.paused) {
           console.log("attempting to pause")
           element.pause()
+        } else if(element.paused){
+          element.play()
+          setTimeout(() => {
+            element.pause()
+            element.currentTime = 0
+          }, 20)
         }
       }
     }
@@ -184,13 +198,13 @@ function Media({ onSetPlayingNow, playingNow, torrents, files }) {
             />
             {((mediaType == "video" || mediaType == "audio") && !allowPlay) &&
               <div className="flex flex-col font-light text-2xs text-gray-100">
-                
+
                 Need to allow playback
                 <button
-                className="py-3 px-5 border border-gray-100"
-                onClick={()=> {
-                  setAllowPlay(true)
-                }}
+                  className="py-3 px-5 border border-gray-100"
+                  onClick={() => {
+                    setAllowPlay(true)
+                  }}
                 >Allow playback</button>
               </div>
             }
