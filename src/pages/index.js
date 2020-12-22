@@ -95,7 +95,7 @@ const Show = ({ data }) => {
   const [buttons, setButtons] = useState(false)
   const [paused, setPaused] = useState(true)
   const [player, setPlayer] = useState(null)
-  const [waitingToStart, setWaitingToStart] = useState(true)
+  const [waitingToStart, setWaitingToStart] = useState(false)
 
 
   const events = [
@@ -206,6 +206,9 @@ const Show = ({ data }) => {
           setPaused(true)
           // setProgr(mainLars.current.currentTime)
           console.log(Math.round(mainLars.current.currentTime * 1000))
+        }}
+        onEnded={() => {
+          setWaitingToStart(true)
         }}
         ref={mainLars} muted
         controls={false}

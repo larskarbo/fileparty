@@ -3,7 +3,7 @@ module.exports = {
     title: "Fileparty",
   },
   plugins: [
-    // `gatsby-transformer-remark`,
+    `gatsby-transformer-remark`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
