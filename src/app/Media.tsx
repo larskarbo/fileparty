@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import render from 'render-media';
-import { ReactComponent as Present } from "./graphics/present.svg";
-import { ReactComponent as SendToPresenter } from "./graphics/send-to-presenter.svg";
+import Present from "./graphics/present.inline.svg";
 import Timeline from './Timeline/Timeline';
 
 type mediaType = "no-media" | "video" | "image" | "audio" | "file" | "pdf" | "not-loaded"
@@ -127,7 +126,7 @@ function Media({ onSetPlayingNow, playingNow, torrents, files }) {
       <div className="flex flex-col  w-full text-center align-middle justify-center">
         <div className="flex">
           <div className="select-none px-3 py-1 text-sm text-gray-800 ml-4 border-b-0 flex flex-grow-0 flex-row items-center bg-yellow-50 border border-gray-500">
-            {/* <Present className="inline w-3 h-3 mr-2" /> Presenter screen */}
+            <Present className="inline w-3 h-3 mr-2" /> Presenter screen
             </div>
         </div>
         <div className="bg-gray-800 w-full" style={{

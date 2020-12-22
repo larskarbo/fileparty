@@ -21,6 +21,7 @@ import classNames from 'classnames';
 import { AiOutlineBulb, AiOutlineFrown, AiOutlineSmile } from "react-icons/ai";
 import { useParams } from "@reach/router";
 import { UserContext } from '../templates/FirebaseInit';
+import Layout from './Layout';
 
 export interface File {
   id: number;
@@ -39,7 +40,7 @@ function setUpClient() {
 }
 
 function Board({ boardId }) {
-  const user = useContext(UserContext);
+  const {user} = useContext(UserContext);
 
   var client = useMemo(setUpClient, [])
 
@@ -59,7 +60,7 @@ function Board({ boardId }) {
 
 
 
-  const link = "https://ultrashare.co/" + boardId;
+  const link = "https://fileparty.co/" + boardId;
   const [isCopied, setCopied] = useClipboard(link);
 
   // const [torrents, setTorrents] = useState([]);
@@ -140,7 +141,7 @@ function Board({ boardId }) {
   }
 
   return (
-    <>
+    <Layout>
       <div className={"flex flex-col-reverse lg:flex-row flex-grow rounded bg-white  border border-gray-300 shadow-lg " + (isDragActive && "border-yellow-500 border-dashed")}>
         <div className="p-6 lg:w-96 rounded-l flex flex-col md:flex-row lg:flex-col">
           <div className="flex flex-col md:w-1/2 md:pr-8 lg:p-0 lg:w-full">
@@ -153,8 +154,8 @@ function Board({ boardId }) {
                 <FaLink className="ml-0 m-auto" />
               </div>
               <input
-                className=" p-2 border-t border-b flex flex-grow"
-                type="text"
+                className=" p-2 border-0 border-t border-b flex flex-grow"
+                type=""
                 value={link}
                 onChange={() => { }}
               />
@@ -308,7 +309,7 @@ function Board({ boardId }) {
         </div>
         <Feeback />
       </div>
-    </>
+    </Layout>
   );
 }
 
@@ -327,14 +328,14 @@ const Feeback = () => {
     setText("")
     if (first) {
       setFirst(false)
-      fetch(process.env.REACT_APP_FEEDBACK_ENDPOINT, {
+      fetch(process.env.GATSBY_FEEDBACK_ENDPOINT, {
         method: "POST",
         body: JSON.stringify({ text: mood + " Feedback: " + text })
       })
 
     } else {
       setFirst(true)
-      fetch(process.env.REACT_APP_FEEDBACK_ENDPOINT, {
+      fetch(process.env.GATSBY_FEEDBACK_ENDPOINT, {
         method: "POST",
         body: JSON.stringify({ text: "Email: " + text })
       })
@@ -364,7 +365,7 @@ const Feeback = () => {
         onFocus={() => setIsFocus(true)}
         onBlur={() => setTimeout(() => setIsFocus(false), 300)}
         value={text} onChange={(e) => setText(e.target.value)}
-        className="w-full h-full pl-2" placeholder={first ? "Type instant feedback..." : "you@example.com"} type="text" />
+        className="w-full h-full pl-2 border-0 text-xs text-gray-600" placeholder={first ? "Type instant feedback..." : "you@example.com"} type="text" />
       {(text.length > 0 && isFocus) &&
         <button type="submit" onClick={onSubmit} className="whitespace-nowrap bg-blue-200 rounded-l-lg  px-3 py-0 text-blue-700" >
           {isFocus ? "Press enter to send" : "Send"}

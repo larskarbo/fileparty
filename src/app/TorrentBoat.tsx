@@ -7,6 +7,7 @@ import {
   FaSpinner,
   FaUpload,
 } from "react-icons/fa";
+import { throttle } from 'lodash';
 import { HiDotsVertical } from "react-icons/hi";
 import { AiFillWarning, AiOutlineReload } from "react-icons/ai";
 import WebTorrent from "webtorrent";
@@ -15,8 +16,8 @@ import audio from "./graphics/audio-file.svg";
 import video from "./graphics/video-file.svg";
 import image from "./graphics/image-file.svg";
 import file from "./graphics/file-file.svg";
-import sendToPresenter from "./graphics/send-to-presenter.svg";
-import { ReactComponent as SendToPresenter } from "./graphics/send-to-presenter.svg";
+// import sendToPresenter from "./graphics/send-to-presenter.svg";
+import SendToPresenter from "./graphics/send-to-presenter.inline.svg";
 import classNames from "classnames";
 
 import useClickOutside from 'use-click-outside';
@@ -47,6 +48,8 @@ function TorrentBoat({
   const [warningStale, setWarningStale] = useState(false);
   const [startedDownloading, setStartedDownloading] = useState(false);
 
+  const streamable = file.name.includes(".mp4")
+  
   useEffect(() => {
     if (!startedDownloading) {
       return;
@@ -80,10 +83,9 @@ function TorrentBoat({
     console.log("adding bunch of handlers")
     setProgress(torrent.progress);
 
-    //TODO debounce ↓
-    torrent.on('download', function () {
+    torrent.on('download', throttle(() => {
       setProgress(torrent.progress);
-    })
+    }, 1000, { 'trailing': true }))
     torrent.on('noPeers', function (announceType) {
       console.log("no peers")
     })
@@ -144,6 +146,11 @@ function TorrentBoat({
             }>
               {file.type}
             </span>
+            {streamable&&
+            <span className={"p-1 px-2 ml-2 rounded-xl uppercase font-bold  text-2xs text-red-400 bg-red-100" }>
+              STREAMABLE
+            </span>
+        }
           </div>
         </div>
         <div className=" flex  flex-row text-center justify-end items-center">
@@ -154,7 +161,6 @@ function TorrentBoat({
                   // className="mr-10"
                   progress={progress}
                 >
-                  {/* <img className="w-5 h-5 mr-1 max-w-none" src={sendToPresenter} /> */}
                   <div className="flex flex-row items-center whitespace-nowrap text-2xs font-bold text-gray-700">
                     LOADING ({prettyBytes(file.size)}){" "}
                     <FaCircle className="ml-1 animate-pulse" />
@@ -167,7 +173,6 @@ function TorrentBoat({
                     }}
                   // className="mr-10"
                   >
-                    {/* <img className="w-5 h-5 mr-1 max-w-none" src={sendToPresenter} /> */}
                     <div className="flex flex-row items-center whitespace-nowrap text-2xs font-bold text-gray-700">
                       LOAD ({prettyBytes(file.size)}) <FaArrowDown className="ml-1" />
                     </div>

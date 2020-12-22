@@ -46,5 +46,13 @@ module.exports = {
         icon: `src/square_logo.svg`
       },
     },
+    {
+      resolve: 'gatsby-plugin-react-svg',
+      options: {
+        rule: {
+          include: /\.inline\.svg$/
+        }
+      }
+    }
   ],
 };
