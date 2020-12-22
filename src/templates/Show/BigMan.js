@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import GatsbyImage from 'gatsby-image';
-import { useStaticQuery } from 'gatsby';
+import { useStaticQuery, graphql } from 'gatsby';
 import { TwitterShareButton } from 'react-share';
 
 export const BigMan = ({ mainLars, active, controls, buttons, player ,
