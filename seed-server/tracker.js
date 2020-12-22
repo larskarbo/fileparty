@@ -4,6 +4,7 @@ var server = new Server({
   udp: false, // enable udp server? [default=true]
   http: true, // enable http server? [default=true]
   ws: true, // enable websocket server? [default=true]
+  trustProxy: true,
   stats: true, // enable web-based statistics? [default=true]
   filter: function (infoHash, params, cb) {
     // Blacklist/whitelist function for allowing/disallowing torrents. If this option is
