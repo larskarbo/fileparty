@@ -20,6 +20,7 @@ function Media({ onSetPlayingNow, playingNow, torrents, files }) {
   const [mediaType, setMediaType] = useState<mediaType>("no-media")
   const [element, setElement] = useState(null)
   const [currentFile, setCurrentFile] = useState(null)
+  const [allowPlay, setAllowPlay] = useState(false)
 
   const file = files[playingNow?.key]
   const torrent = torrents?.find(t => file?.magnet == t.magnetURI)
@@ -72,7 +73,10 @@ function Media({ onSetPlayingNow, playingNow, torrents, files }) {
     if (!currentFile) {
       return
     }
-    if(currentFile.type == "video" || currentFile.type == "audio"){
+    if (!allowPlay) {
+      return
+    }
+    if (currentFile.type == "video" || currentFile.type == "audio") {
 
       const element = refs[currentFile.type]?.current
       console.log("🚀 ~ element", element)
@@ -91,10 +95,11 @@ function Media({ onSetPlayingNow, playingNow, torrents, files }) {
     }
     // mainRef.current
     // return () => ref.off()
-  }, [playingNow, currentFile]);
+  }, [playingNow, currentFile, allowPlay]);
 
   const onPlay = () => {
     console.log("play")
+    setAllowPlay(true)
     onSetPlayingNow({
       state: "playing"
     })
@@ -173,10 +178,22 @@ function Media({ onSetPlayingNow, playingNow, torrents, files }) {
               controls={false}
               ref={videoRef}
               className={classNames(
-                (mediaType != "video") && "hidden",
+                (mediaType != "video" || !allowPlay) && "hidden",
                 "h-full"
               )}
             />
+            {((mediaType == "video" || mediaType == "audio") && !allowPlay) &&
+              <div className="flex flex-col font-light text-2xs text-gray-100">
+                
+                Need to allow playback
+                <button
+                className="py-3 px-5 border border-gray-100"
+                onClick={()=> {
+                  setAllowPlay(true)
+                }}
+                >Allow playback</button>
+              </div>
+            }
             <audio
               ref={audioRef}
               className={classNames(

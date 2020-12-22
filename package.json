@@ -16,6 +16,7 @@
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
     "autoprefixer": "^9",
+    "bittorrent-tracker": "^9.15.0",
     "body-parser": "^1.19.0",
     "classnames": "^2.2.6",
     "crypto-random-string": "^3.3.0",

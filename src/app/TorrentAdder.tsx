@@ -8,11 +8,12 @@ function TorrentAdder({ rawFile,  client, onSetTorrent, onDestroy, onRemoveTorre
   useEffect(() => {
     if (rawFile) {
       console.log("🚀 ~ rawFile.file", rawFile.file)
-      client.seed([rawFile.file], {name: rawFile.file.name}, function (torrent) {
+      client.seed([rawFile.file], {name: rawFile.file.name, announce: ["ws://localhost:2468"]}, function (torrent) {
         console.log("🚀 ~ torrent", torrent)
         onSetTorrent(torrent);
       }, function(torrent){
         torrent.on("error", function(err) {
+      console.log("🚀 ~ torrent", torrent)
           if(err.message.includes("duplicate")){
             const infoHash = err.message.split("Cannot add duplicate torrent ")[1]
             console.log("🚀 ~ infoHash", infoHash)

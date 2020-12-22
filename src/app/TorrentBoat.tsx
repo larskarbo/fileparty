@@ -7,7 +7,7 @@ import {
   FaSpinner,
   FaUpload,
 } from "react-icons/fa";
-import { throttle } from 'lodash';
+import { debounce } from 'lodash';
 import { HiDotsVertical } from "react-icons/hi";
 import { AiFillWarning, AiOutlineReload } from "react-icons/ai";
 import WebTorrent from "webtorrent";
@@ -83,9 +83,9 @@ function TorrentBoat({
     console.log("adding bunch of handlers")
     setProgress(torrent.progress);
 
-    torrent.on('download', throttle(() => {
+    torrent.on('download', () => {
       setProgress(torrent.progress);
-    }, 1000, { 'trailing': true }))
+    })
     torrent.on('noPeers', function (announceType) {
       console.log("no peers")
     })

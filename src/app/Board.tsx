@@ -31,7 +31,17 @@ export interface File {
 }
 
 function setUpClient() {
-  const client = new WebTorrent()
+  const client = new WebTorrent({
+    // tracker: {
+    //     // infoHash: new Buffer('012345678901234567890'), // hex string or Buffer
+    //     // peerId: new Buffer('01234567890123456789'), // hex string or Buffer
+    //     announce: ['ws://localhost:2468'], // list of tracker server urls
+    //     // port: 2468 // torrent client port, (in browser, optional)
+    // },
+    dht: false,
+    webSeeds: false
+  })
+  console.log("🚀 ~ client", client)
   client.on('error', function (err) {
     console["log"]("🚀 ~ err", err)
     // alert("Fatal error")
@@ -206,7 +216,7 @@ function Board({ boardId }) {
                     client.remove(file.magnet)
                   } catch (_) { }
                   ref.child("items").child(key).remove();
-                  if (playingNow.key == key) {
+                  if (playingNow?.key == key) {
                     ref.child("playingNow").set({})
                   }
                 }}
