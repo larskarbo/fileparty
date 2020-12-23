@@ -21,16 +21,14 @@ export const Show = ({ data }) => {
     if (mainLars) {
       // if () {
       // } else {
-        const test = function() {
+      const test = function () {
 
-          if(mainLars.current.readyState >= 4) {
-            mainLars.current.play();
-          }
-        
-        }
-        // }
-        mainLars.current.addEventListener('loadeddata', test);
-        return () => mainLars.current?.removeEventListener('loadeddata', test);
+        mainLars.current.play();
+
+      }
+      // }
+      mainLars.current.addEventListener('loadeddata', test);
+      return () => mainLars.current?.removeEventListener('loadeddata', test);
     }
 
   }, [mainLars]);
@@ -43,14 +41,14 @@ export const Show = ({ data }) => {
       <SmallMan controls={controls} className="absolute top-32 right-60" type={"full"} bigMan={mainLars} paused={paused} active={active} buttons={buttons} player={player} />
       <SmallMan controls={controls} className="absolute top-64 right-56" bigMan={mainLars} paused={paused} active={active} buttons={buttons} player={player} />
       <BigMan controls={controls} mainLars={mainLars} active={active} buttons={buttons} player={player}
-      setPaused={setPaused}
-      paused={paused}
-      setProgr={setProgr}
-      setPlayer={setPlayer}
-      setButtons={setButtons}
-      setActive={setActive}
+        setPaused={setPaused}
+        paused={paused}
+        setProgr={setProgr}
+        setPlayer={setPlayer}
+        setButtons={setButtons}
+        setActive={setActive}
       />
-      
+
     </div>
   );
 };
