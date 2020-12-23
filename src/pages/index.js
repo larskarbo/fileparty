@@ -12,7 +12,6 @@ import Media from "../app/Media";
 import { graphql, Link } from 'gatsby';
 import { LarsKarbo } from "../templates/LarsKarbo";
 import { Show } from "../templates/Show/Show";
-import '../templates/styles.css';
 
 
 function Intro() {
