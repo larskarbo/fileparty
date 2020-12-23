@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 // import logo from "./logo.svg";
-import "../app/index.css";
+// import "../app/index.css";
 
 import Board from "../app/Board";
 // import Admin from "../app/Admin";

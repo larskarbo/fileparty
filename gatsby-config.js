@@ -3,6 +3,7 @@ module.exports = {
     title: "Fileparty",
   },
   plugins: [
+    `gatsby-plugin-postcss`,
     `gatsby-transformer-remark`,
     {
       resolve: `gatsby-source-filesystem`,
@@ -18,7 +19,6 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
-    `gatsby-plugin-postcss`,
     `gatsby-transformer-sharp`, `gatsby-plugin-sharp`,
     `gatsby-plugin-react-helmet`,
     // {
