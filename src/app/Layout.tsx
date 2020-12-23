@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'gatsby';
 import logo from "./logo.svg"
 
-
 function Layout({children}) {
 
   return (
