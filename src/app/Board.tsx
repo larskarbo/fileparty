@@ -5,7 +5,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import WebTorrent from "webtorrent";
 
 import { useDropzone } from "react-dropzone";
 import TorrentBoat from "./TorrentBoat";
@@ -22,6 +21,8 @@ import { AiOutlineBulb, AiOutlineFrown, AiOutlineSmile } from "react-icons/ai";
 import { useParams } from "@reach/router";
 import { UserContext } from '../templates/FirebaseInit';
 import Layout from './Layout';
+import PresenterScreen from "./PresenterScreen";
+import { client } from "./setUpClient";
 
 export interface File {
   id: number;
@@ -30,35 +31,16 @@ export interface File {
   torrent: any;
 }
 
-function setUpClient() {
-  const client = new WebTorrent({
-    tracker: {
-    //     // infoHash: new Buffer('012345678901234567890'), // hex string or Buffer
-    //     // peerId: new Buffer('01234567890123456789'), // hex string or Buffer
-        announce: ["wss://tracker.fileparty.co"], // list of tracker server urls
-    //     // port: 2468 // torrent client port, (in browser, optional)
-    },
-    dht: false,
-    webSeeds: false
-  })
-  console.log("🚀 ~ client", client)
-  client.on('error', function (err) {
-    console["log"]("🚀 ~ err", err)
-    // alert("Fatal error")
-  })
-  return client
-}
-
 function Board({ boardId }) {
   const {user} = useContext(UserContext);
 
-  var client = useMemo(setUpClient, [])
 
   const [downloadSpeed, setDownloadSpeed] = useState(0);
   const [uploadSpeed, setUploadSpeed] = useState(0);
 
   useEffect(() => {
     if (!client) {
+
       return;
     }
     const interval = setInterval(() => {
@@ -121,7 +103,7 @@ function Board({ boardId }) {
 
 
   const onDrop = useCallback(acceptedFiles => {
-    // console.log("🚀 ~ acceptedFiles", ))
+    console.log("🚀 ~ acceptedFiles")
     const aFiles = [...Array.from(acceptedFiles)]
     // return
     // Do something with the files
@@ -280,18 +262,18 @@ function Board({ boardId }) {
             </div>
 
 
+
           </div>
 
         </div>
 
-        <Media playingNow={playingNow} torrents={torrents} files={files}
+        <PresenterScreen playingNow={playingNow} torrents={torrents} files={files}
           onSetPlayingNow={(obj) => {
             ref.child("playingNow").set({
               ...playingNow,
               ...obj
             });
-          }}
-        />
+          }} />
       </div>
       <div className="flex flex-col-reverse lg:flex-row justify-between pt-5 pb-6 ">
 
@@ -412,7 +394,6 @@ const PermSettings = () => {
 
 
 const whichType = (file) => {
-console.log("🚀 ~ file", file)
   if (file.type.includes("video")) {
     return "video"
   } else if (file.type.includes("image")) {

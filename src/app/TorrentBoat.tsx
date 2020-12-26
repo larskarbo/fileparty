@@ -58,7 +58,9 @@ function TorrentBoat({
       console.log("torrent already exists");
       return;
     }
-    client.add(file.magnet, function (torrent) {
+    client.add(file.magnet, {
+      announce: ["wss://tracker.fileparty.co"]
+    }, function (torrent) {
       onSetTorrent(torrent);
     });
   }, [startedDownloading]);
@@ -90,11 +92,14 @@ function TorrentBoat({
       console.log("no peers")
     })
     torrent.on('done', function () {
+      console.log("IT IS DONE!!")
+      torrent.done = true
       onFinish();
     })
   }, [torrent]);
 
   const reload = () => {
+    console.log(torrent)
     onRemoveTorrent()
     setStartedDownloading(false)
     setWarningStale(false)
@@ -102,6 +107,7 @@ function TorrentBoat({
 
   const presentDisabled = false;
   const playing = playingNow?.key == itemKey
+
 
   return (
     <div
@@ -180,7 +186,7 @@ function TorrentBoat({
                 )}
             </>
           }
-          {torrent?.done &&
+          {(torrent?.done && (streamable || file.size < 100000)) &&
             <Button
               onClick={() => {
 

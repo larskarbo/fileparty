@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { FaPause, FaPlay, FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
+import { BsFullscreen } from 'react-icons/bs';
 import Handle from './Handle';
 
 function Timeline({ element
-  , onPlay, onSeek, onPause, playingNow
+  , onPlay, onSeek, onPause, playingNow, muted, setMuted
 }) {
   const [pointerAt, setPointerAt] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -39,7 +41,7 @@ function Timeline({ element
     }
     element.addEventListener('timeupdate', onTimeUpdate);
     element.addEventListener('seeking', onSeeking);
-    
+
     return () => {
       element.removeEventListener('timeupdate', onTimeUpdate);
       element.removeEventListener('seeking', onSeeking);
@@ -54,30 +56,42 @@ function Timeline({ element
   }
   return (
     <div
-     
+
       className="h-full w-full flex flex-row "
     >
-      <div className="text-white flex items-center px-2">
-        <button onClick={() => {
-          if(playingNow?.state=="playing"){
-            onPause()
-          } else {
-            onPlay()
-          }
-        }}>pp</button>
-      </div>
-      <div ref={lineRef} className="flex flex-grow relative items-center">
-        
-        
-        <Handle parent={lineRef.current} duration={duration} value={pointerAt}
-        onUp={(ms) => onSeek(ms)
-        }
-        />
+      {playingNow &&
+        <>
+          <div className="text-white flex items-center">
+            <button className=" px-4 h-full" onClick={() => {
+              if (playingNow.state == "playing") {
+                onPause()
+              } else {
+                onPlay()
+              }
+            }}>{
+                playingNow.state == "playing" ?
+                  <FaPause />
+                  : <FaPlay />
 
-      </div>
-      <div className="text-white flex items-center px-2">
-        volume
-      </div>
+              }</button>
+          </div>
+          <div ref={lineRef} className="flex flex-grow relative items-center">
+
+
+            <Handle parent={lineRef.current} duration={duration} value={pointerAt}
+              onUp={(ms) => onSeek(ms)
+              }
+            />
+
+          </div>
+          <div className="text-white flex items-center px-2">
+            <button onClick={() => setMuted(!muted)} className=" px-2 h-full">{muted ? <FaVolumeMute /> : <FaVolumeUp />}</button>
+          </div>
+          <div className="text-white flex items-center">
+            <button className=" px-2 h-full"><BsFullscreen /></button>
+          </div>
+        </>
+      }
     </div>
   );
 }

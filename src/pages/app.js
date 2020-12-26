@@ -29,21 +29,6 @@ function App() {
     </Router>
   );
 }
-
-let Home = (hey) => {
-  console.log("🚀 ~ hey", hey)
-
-  return (
-    <div>
-      <h1>Home</h1>
-      <nav>
-        <Link to="/">Home</Link> |{" "}
-        <Link to="dashboard">Dashboard</Link>
-      </nav>
-    </div>
-  )
-}
-
 // {user ? (
 
 //   "Loading..."

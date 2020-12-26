@@ -26,6 +26,8 @@
     "@types/react-dom": "^16.9.8",
     "autoprefixer": "^9",
     "body-parser": "^1.19.0",
+    "can-autoplay": "^3.0.0",
+    "capture-frame": "^4.0.0",
     "classnames": "^2.2.6",
     "crypto-random-string": "^3.3.0",
     "drag-drop": "^6.1.0",
@@ -72,7 +74,7 @@
     "webtorrent": "larskarbo/webtorrent#master"
   },
   "scripts": {
-    "start": "gatsby develop",
+    "start": "gatsby develop -H 0.0.0.0",
     "build": "gatsby build",
     "buildcssfordebug": "NODE_ENV=production npx tailwindcss-cli@latest build src/templates/styles.css -o tailwind.css"
   },
