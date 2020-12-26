@@ -4,7 +4,7 @@ import { BsFullscreen } from 'react-icons/bs';
 import Handle from './Handle';
 
 function Timeline({ element
-  , onPlay, onSeek, onPause, playingNow, muted, setMuted
+  , onPlay, onSeek, onPause, playingNow, muted, setMuted, requestFullScreen
 }) {
   const [pointerAt, setPointerAt] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -88,7 +88,7 @@ function Timeline({ element
             <button onClick={() => setMuted(!muted)} className=" px-2 h-full">{muted ? <FaVolumeMute /> : <FaVolumeUp />}</button>
           </div>
           <div className="text-white flex items-center">
-            <button className=" px-2 h-full"><BsFullscreen /></button>
+            <button onClick={() => requestFullScreen()} className=" px-2 h-full"><BsFullscreen /></button>
           </div>
         </>
       }

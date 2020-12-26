@@ -209,7 +209,7 @@ function TorrentBoat({
               }}
             >
               <div className="flex flex-row items-center whitespace-nowrap text-2xs font-bold text-gray-700">
-                DOWNLOAD <FaDownload className="ml-1" />
+                SAVE <FaDownload className="ml-1" />
               </div>
             </Button>
           }

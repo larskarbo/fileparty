@@ -149,6 +149,17 @@ function Media({ onSetPlayingNow, playingNow, torrent, file, setCanAutoPlay }) {
 
   }
 
+  const requestFullScreen = () => {
+    const vid = element
+    if (vid.requestFullscreen) {
+      vid.requestFullscreen();
+    } else if (vid.mozRequestFullScreen) {
+      vid.mozRequestFullScreen();
+    } else if (vid.webkitRequestFullscreen) {
+      vid.webkitRequestFullscreen();
+    }
+  }
+
   const onSeek = (ms) => {
     console.log("seek")
     onSetPlayingNow({
@@ -238,6 +249,8 @@ function Media({ onSetPlayingNow, playingNow, torrent, file, setCanAutoPlay }) {
         {(mediaType == "video" || mediaType == "audio") &&
           <Timeline element={element}
             onPlay={onPlay}
+            requestFullScreen={requestFullScreen}
+
             onPause={onPause}
             onSeek={onSeek}
             playingNow={playingNow}

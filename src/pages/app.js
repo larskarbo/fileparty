@@ -25,7 +25,7 @@ function App() {
       <Login user={user} path="/login" />
       <Logout path="/logout" />
       {/* <Login path="/login" /> */}
-      <Board path="/:boardId" />
+      <Board path="/room/:boardId" />
     </Router>
   );
 }
