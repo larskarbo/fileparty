@@ -5,26 +5,24 @@ import Present from "./graphics/present.inline.svg";
 import Timeline from './Timeline/Timeline';
 import canAutoPlay from 'can-autoplay';
 import captureFrame from "capture-frame"
-type mediaType = "no-media" | "video" | "image" | "audio" | "file" | "pdf" | "not-loaded"
-function Media({ onSetPlayingNow, playingNow, torrents, files, setCanAutoPlay }) {
+type mediaType = "no-media" | "video" | "image" | "audio" | "file" | "not-loaded"
+function Media({ onSetPlayingNow, playingNow, torrent, file, setCanAutoPlay }) {
+
   const imageRef = useRef();
   const videoRef = useRef();
   const audioRef = useRef();
-  const pdfRef = useRef();
+  // const pdfRef = useRef();
   const refs = {
     image: imageRef,
     audio: audioRef,
     video: videoRef,
-    pdf: pdfRef
+    // pdf: pdfRef
   }
   const [mediaType, setMediaType] = useState<mediaType>("no-media")
   const [element, setElement] = useState(null)
-  const [currentFile, setCurrentFile] = useState(null)
   const [tapMe, setTapMe] = useState(false)
   const [muted, setMuted] = useState(false)
-
-  const file = files[playingNow?.key]
-  const torrent = torrents?.find(t => file?.magnet == t.magnetURI)
+  const [asdf, setAsdf] = useState(0)
 
   useEffect(() => {
 
@@ -32,55 +30,65 @@ function Media({ onSetPlayingNow, playingNow, torrents, files, setCanAutoPlay })
 
   useEffect(() => {
     // setLoaded(false);
-    if (!playingNow) {
-      setMediaType("no-media")
-      return
-    }
+    // if (!playingNow) {
+    //   setMediaType("no-media")
+    //   return
+    // }
     // torrents.files[0].appendTo(imageRef.current)
 
     if (!file) {
       setMediaType("no-media")
-      setCurrentFile(null)
       return
     }
 
-    setCurrentFile(file)
 
-
-    if (!torrent || torrent.progress != 1) {
+    if (!torrent) {
       setMediaType("not-loaded")
+      return
+    }
+
+    if(file.name.includes(".mp4")){
+
+    } else if (torrent.progress < 1){
+      torrent.on('done', function () {
+        setAsdf(Math.random())
+      })
       return
     }
 
     setMediaType(file.type)
 
-    const element = refs[file.type].current
+    console.log('file.type: ', file.type);
+    if(file.type=="file"){
+      console.log("TODO render file")
+    } else {
+      const element = refs[file.type].current
+      render.render(torrent.files[0], refs[file.type].current, {
+        controls: false,
+        autoplay: false,
+      }, function (err, elem) {
+        if (err) return console.error(err.message)
+        setElement(element)
+        console.log(elem) // this is the newly created element with the media in it
+      })
 
-    console.log("🚀 ~ torrent", torrent)
-    render.render(torrent.files[0], refs[file.type].current, {
-      controls: false,
-      autoplay: false,
-    }, function (err, elem) {
-      if (err) return console.error(err.message)
-      setElement(element)
-      console.log(elem) // this is the newly created element with the media in it
-    })
+    }
 
     // mainRef.current
     // return () => ref.off()
-  }, [playingNow?.key, files, torrent]);
+  }, [file, torrent, asdf]);
 
   useEffect(() => {
     // setLoaded(false);
     if (!playingNow) {
       return
     }
-    if (!currentFile) {
+    if (!file) {
       return
     }
-    if (currentFile.type == "video" || currentFile.type == "audio") {
+    if (file.type == "video" || file.type == "audio") {
 
-      const element = refs[currentFile.type]?.current
+      const element = refs[file.type]?.current
       element.currentTime = (playingNow.position / 1000)
       if (playingNow.state == "playing") {
         if (element.paused) {
@@ -120,7 +128,7 @@ function Media({ onSetPlayingNow, playingNow, torrents, files, setCanAutoPlay })
     }
     // mainRef.current
     // return () => ref.off()
-  }, [playingNow, currentFile]);
+  }, [playingNow, file]);
 
   const onPlay = () => {
     console.log("play")
@@ -149,8 +157,10 @@ function Media({ onSetPlayingNow, playingNow, torrents, files, setCanAutoPlay })
   }
 
   return (
-    <div>
-      <div className="h-64 flex items-center justify-center relative">
+    <div className="flex flex-col justify-between w-full">
+      <div className="flex items-center justify-center relative w-full" style={{
+        height: 500
+      }}>
 
         <div className={classNames(
           (mediaType != "not-loaded") && "hidden",
@@ -160,13 +170,13 @@ function Media({ onSetPlayingNow, playingNow, torrents, files, setCanAutoPlay })
             Load needed.
               </div>
           <div>
-            Load the file {currentFile?.name} to show this file
+            Load the file {file?.name} to show this file
               </div>
         </div>
 
         <div className={classNames(
           (mediaType != "no-media") && "hidden",
-          "font-light text-2xs text-gray-100"
+          "font-light text-2xs text-gray-600"
         )}>
           <div className="flex justify-center">
             {/* <SendToPresenter
@@ -178,14 +188,15 @@ function Media({ onSetPlayingNow, playingNow, torrents, files, setCanAutoPlay })
                 /> */}
           </div>
           <div>
-            The presenter screen is currently empty
+            Waiting for host to add files...
               </div>
         </div>
+
         <img
           ref={imageRef}
           className={classNames(
             (mediaType != "image") && "hidden",
-            "h-full"
+            " max-h-full max-w-full w-auto"
           )} />
         <video
           controls={true}
@@ -214,16 +225,17 @@ function Media({ onSetPlayingNow, playingNow, torrents, files, setCanAutoPlay })
             ""
           )}
         />
-        <iframe
+        {/* <iframe
           ref={pdfRef}
           className={classNames(
             (mediaType != "pdf") && "hidden",
             ""
           )}
-        />
+        /> */}
       </div>
+      
       <div className="h-8 bg-gray-800 border-t border-gray-500">
-        {(mediaType == "video" || mediaType != "audio") &&
+        {(mediaType == "video" || mediaType == "audio") &&
           <Timeline element={element}
             onPlay={onPlay}
             onPause={onPause}

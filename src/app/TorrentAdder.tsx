@@ -7,34 +7,7 @@ function TorrentAdder({ rawFile, client, onSetTorrent, onDestroy, onRemoveTorren
 
   useEffect(() => {
     if (rawFile) {
-      console.log("🚀 ~ rawFile.file", rawFile.file)
-      client.seed([rawFile.file], { name: rawFile.file.name, 
-        announce: ["wss://tracker.fileparty.co"]
-       }, function (torrent) {
-         console.log("started seeding", torrent)
-        onSetTorrent(torrent);
-      }, function (torrent) {
-        torrent.on("error", function (err) {
-          if (err.message.includes("duplicate")) {
-            const infoHash = err.message.split("Cannot add duplicate torrent ")[1]
-            onRemoveTorrentByInfoHash(infoHash)
-            // if(client.torrents.find(t=> t.magnetURI))
-            //try again
-            client.seed([rawFile.file], { name: rawFile.file.name, 
-              announce: ["wss://tracker.fileparty.co"] }, function (torrent) {
-              console.log("added duplicate torrent", torrent)
-              onSetTorrent(torrent);
-            }, function (torrent) {
-              onDestroy()
-            })
-
-
-          } else {
-            console["log"]("error!", err.message)
-
-          }
-        })
-      })
+      
     }
   }, [])
 

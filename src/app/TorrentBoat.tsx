@@ -30,7 +30,6 @@ const icons = {
 };
 
 function TorrentBoat({
-  itemKey,
   onSetTorrent,
   playingNow,
   file,
@@ -46,10 +45,10 @@ function TorrentBoat({
   const myRef = useRef(null);
   const [progress, setProgress] = useState(0);
   const [warningStale, setWarningStale] = useState(false);
-  const [startedDownloading, setStartedDownloading] = useState(false);
+  const [startedDownloading, setStartedDownloading] = useState(true);
 
   const streamable = file.name.includes(".mp4")
-  
+
   useEffect(() => {
     if (!startedDownloading) {
       return;
@@ -58,8 +57,10 @@ function TorrentBoat({
       console.log("torrent already exists");
       return;
     }
+    console.log("ADDING")
+    console.log('file.magnet: ', file.magnet);
     client.add(file.magnet, {
-      announce: ["wss://tracker.fileparty.co"]
+      // announce: ["wss://tracker.fileparty.co"]
     }, function (torrent) {
       onSetTorrent(torrent);
     });
@@ -94,7 +95,7 @@ function TorrentBoat({
     torrent.on('done', function () {
       console.log("IT IS DONE!!")
       torrent.done = true
-      onFinish();
+      // onFinish();
     })
   }, [torrent]);
 
@@ -106,18 +107,16 @@ function TorrentBoat({
   }
 
   const presentDisabled = false;
-  const playing = playingNow?.key == itemKey
+  const playing = !!playingNow
 
 
   return (
     <div
       className={classNames("py-2 rounded",
-        playing && "bg-gray-100",
+        "bg-white border border-gray-200 shadow pr-2",
+        "w-96",
         warningStale && "border border-yellow-600 bg-yellow-50 py-2")}
       style={{
-        marginLeft: -20,
-        marginRight: -20,
-        paddingRight: 10,
       }}
     >
       <div className="flex h-12 flex-row">
@@ -152,11 +151,11 @@ function TorrentBoat({
             }>
               {file.type}
             </span>
-            {streamable&&
-            <span className={"p-1 px-2 ml-2 rounded-xl uppercase font-bold  text-2xs text-red-400 bg-red-100" }>
-              STREAMABLE
+            {streamable &&
+              <span className={"p-1 px-2 ml-2 rounded-xl uppercase font-bold  text-2xs text-red-400 bg-red-100"}>
+                STREAMABLE
             </span>
-        }
+            }
           </div>
         </div>
         <div className=" flex  flex-row text-center justify-end items-center">
@@ -186,28 +185,32 @@ function TorrentBoat({
                 )}
             </>
           }
-          {(torrent?.done && (streamable || file.size < 100000)) &&
+          {(torrent?.done && (streamable || file.size < 100000000)) &&
             <Button
               onClick={() => {
+                torrent.files[0].getBlobURL(function (err, url) {
+                  if (err) throw err
+                  // Create an invisible A element
+                  const a = document.createElement("a");
+                  a.style.display = "none";
+                  document.body.appendChild(a);
 
-                if (playing) {
-                  onUnPlay()
-                } else {
-                  onPlay();
-                }
+                  // Set the HREF to a Blob representation of the data to be downloaded
+                  a.href = url
+
+                  // Use download attribute to set set desired file name
+                  a.setAttribute("download", file.name);
+
+                  // Trigger the download by simulating click
+                  a.click();
+
+                  document.body.removeChild(a);
+                })
               }}
-              disabled={presentDisabled}
-              inverted={playing}
-              className={classNames("ml-2", playing && "bg-gray-600")}
             >
-              <SendToPresenter
-                fill={playing ? "white" : "black"}
-                stroke={playing ? "white" : "black"}
-                className={classNames(
-                  "w-5 h-5 mr-1 max-w-none ",
-                  presentDisabled && "opacity-50"
-                )}
-              />
+              <div className="flex flex-row items-center whitespace-nowrap text-2xs font-bold text-gray-700">
+                DOWNLOAD <FaDownload className="ml-1" />
+              </div>
             </Button>
           }
         </div>
