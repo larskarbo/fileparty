@@ -1,4 +1,5 @@
 import React, { useCallback, useContext } from "react";
+import Layout from '../app/Layout';
 
 function NotFound() {
 
