@@ -10,7 +10,6 @@ import {
 import { debounce } from 'lodash';
 import { HiDotsVertical } from "react-icons/hi";
 import { AiFillWarning, AiOutlineReload } from "react-icons/ai";
-import WebTorrent from "webtorrent";
 import prettyBytes from "pretty-bytes";
 import audio from "./graphics/audio-file.svg";
 import video from "./graphics/video-file.svg";

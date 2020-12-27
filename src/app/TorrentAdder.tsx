@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaDownload, FaUpload } from "react-icons/fa";
-import WebTorrent from "webtorrent";
 import prettyBytes from "pretty-bytes"
 
 function TorrentAdder({ rawFile, client, onSetTorrent, onDestroy, onRemoveTorrentByInfoHash }) {

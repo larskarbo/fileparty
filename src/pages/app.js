@@ -23,6 +23,7 @@ function App() {
       <Helmet>
         <meta name="robots" content="noindex" />
       </Helmet>
+      <SEO />
       <Router basepath="/">
 
         {/* <Admin user={user} path="/admin" /> */}

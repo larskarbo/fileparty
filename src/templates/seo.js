@@ -24,8 +24,6 @@ function SEO() {
       <meta property="og:site_name" content="European Travel, Inc." />
       <meta name="twitter:card" content="summary_large_image" />
 
-      <meta property="og:url" content="https://fileparty.co/" />
-      <link rel="canonical" href="https://fileparty.co/" />
 
       <meta
         name="twitter:creator"

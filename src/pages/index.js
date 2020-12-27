@@ -22,6 +22,12 @@ function Intro() {
       className="flex flex-col bg-gradient-to-tr  from-gray-100 pt-0 to-yellow-50 min-h-screen"
     >
 
+      <Helmet>
+
+        <meta property="og:url" content="https://fileparty.co/" />
+        <link rel="canonical" href="https://fileparty.co/" />
+      </Helmet>
+
       <SEO />
       <h1 className="text-5xl font-bold text-black text-center pt-40 pb-10">
         <div className="mb-1">FileParty lets you</div>
