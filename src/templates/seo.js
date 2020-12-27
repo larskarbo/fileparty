@@ -26,6 +26,11 @@ function SEO() {
 
       <meta property="og:url" content="https://fileparty.co/" />
       <link rel="canonical" href="https://fileparty.co/" />
+
+      <meta
+        name="twitter:creator"
+        content={"larskarbo"}
+      />
     </Helmet>
   );
 }

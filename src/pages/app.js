@@ -9,7 +9,7 @@ import { Link } from "gatsby"
 import Layout from "../app/Layout";
 // import Intro from "../gatsby/src/pages";
 import Login from '../app/Login';
-import { UserContext } from '../templates/FirebaseInit';
+import FirebaseInit, { UserContext } from '../templates/FirebaseInit';
 import Create from '../app/Create';
 import Logout from '../app/Logout';
 import SEO from "../templates/seo";
@@ -19,23 +19,32 @@ import { Helmet } from 'react-helmet';
 function App() {
   const { user, loading } = useContext(UserContext)
   return (
-    <Router basepath="/">
+    <>
       <Helmet>
         <meta name="robots" content="noindex" />
       </Helmet>
-      {/* <Admin user={user} path="/admin" /> */}
-      {/* <div user={user} path="/:boardId">Hey</div> */}
-      <Create user={user} loading={loading} path="/app/create" />
+      <Router basepath="/">
 
-      <Login user={user} path="/app/login" />
-      <Logout path="/app/logout" />
-      {/* <Login path="/login" /> */}
-      <Board path="/app/:boardId" />
-    </Router>
+        {/* <Admin user={user} path="/admin" /> */}
+        {/* <div user={user} path="/:boardId">Hey</div> */}
+        <Create user={user} loading={loading} path="/app/create" />
+
+        <Login user={user} path="/app/login" />
+        <Logout path="/app/logout" />
+        {/* <Login path="/login" /> */}
+        <Board path="/app/:boardId" />
+      </Router>
+    </>
   );
 }
+
+const Wrapper = () => (
+  <FirebaseInit>
+    <App />
+  </FirebaseInit>
+)
 // {user ? (
 
 //   "Loading..."
 // )}
-export default App;
+export default Wrapper;

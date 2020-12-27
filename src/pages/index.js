@@ -16,9 +16,6 @@ import Helmet from "react-helmet"
 import SEO from "../templates/seo"
 
 function Intro() {
-  const { user } = useContext(UserContext);
-
-
 
   return (
     <div
