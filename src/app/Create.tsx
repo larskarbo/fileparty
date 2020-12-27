@@ -13,7 +13,7 @@ function Create({ loading, user }) {
   useEffect(() => {
     console.log("🚀 ~ [loading, isGoogle]", [loading, isGoogle])
     if (!loading && !isGoogle) {
-      navigate("/login", {replace: true})
+      navigate("/app/login", {replace: true})
     }
     if (!loading && isGoogle) {
       const boardId = cryptoRandomString({ length: 6 });
@@ -28,7 +28,7 @@ function Create({ loading, user }) {
           created: new Date().getTime(),
         })
         .then(() => {
-          navigate("/" + boardId);
+          navigate("/app/" + boardId);
           firebase
             .database()
             .ref("stats/boardsCreatedTotal")

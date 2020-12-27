@@ -11,6 +11,7 @@ function Media({ onSetPlayingNow, playingNow, torrent, file, setCanAutoPlay }) {
   const imageRef = useRef();
   const videoRef = useRef();
   const audioRef = useRef();
+  const contRef = useRef();
   // const pdfRef = useRef();
   const refs = {
     image: imageRef,
@@ -62,6 +63,10 @@ function Media({ onSetPlayingNow, playingNow, torrent, file, setCanAutoPlay }) {
     if(file.type=="file"){
       console.log("TODO render file")
     } else {
+
+      if(file.size > 200000000 && !file.name.includes(".mp4")){
+        return setMediaType("file")
+      }
       const element = refs[file.type].current
       render.render(torrent.files[0], refs[file.type].current, {
         controls: false,
@@ -150,7 +155,7 @@ function Media({ onSetPlayingNow, playingNow, torrent, file, setCanAutoPlay }) {
   }
 
   const requestFullScreen = () => {
-    const vid = element
+    const vid = contRef.current
     if (vid.requestFullscreen) {
       vid.requestFullscreen();
     } else if (vid.mozRequestFullScreen) {
@@ -168,14 +173,14 @@ function Media({ onSetPlayingNow, playingNow, torrent, file, setCanAutoPlay }) {
   }
 
   return (
-    <div className="flex flex-col justify-between w-full">
-      <div className="flex items-center justify-center relative w-full" style={{
+    <div className="flex flex-col justify-between w-full" ref={contRef}>
+      <div className="flex items-center justify-center relative w-full"  style={{
         height: 500
       }}>
 
         <div className={classNames(
           (mediaType != "not-loaded") && "hidden",
-          "font-light text-2xs text-gray-100"
+          "font-light text-xs text-gray-600 text-center"
         )}>
           <div className="font-bold">
             Load needed.
@@ -187,7 +192,7 @@ function Media({ onSetPlayingNow, playingNow, torrent, file, setCanAutoPlay }) {
 
         <div className={classNames(
           (mediaType != "no-media") && "hidden",
-          "font-light text-2xs text-gray-600"
+          "font-light text-xs text-gray-600"
         )}>
           <div className="flex justify-center">
             {/* <SendToPresenter
@@ -201,6 +206,28 @@ function Media({ onSetPlayingNow, playingNow, torrent, file, setCanAutoPlay }) {
           <div>
             Waiting for host to add files...
               </div>
+        
+        
+        </div>
+        <div className={classNames(
+          (mediaType != "file") && "hidden",
+          "font-light text-xs text-gray-600 text-center"
+        )}>
+          <div className="flex justify-center">
+            {/* <SendToPresenter
+                  fill={"white"}
+                  stroke={"white"}
+                  className={classNames(
+                    "w-5 h-5 ",
+                  )}
+                /> */}
+          </div>
+          <p className="font-bold">
+            This file can't be previewed, but you can download it.
+          </p>
+          <p className="mt-2">
+            Tip: Video files with .mp4 extension can be streamed, even with file sizes more than 200mb
+          </p>
         </div>
 
         <img
@@ -222,7 +249,7 @@ function Media({ onSetPlayingNow, playingNow, torrent, file, setCanAutoPlay }) {
         />
         {tapMe &&
           <div className="absolute top-0 bottom-0 right-0 left-0 flex items-center justify-center">
-            <button className="border-2 border-gray-50 hover:opacity-100 transition-opacity duration-200  text-gray-50 opacity-80 font-normal px-4 py-2 rounded " onClick={() => {
+            <button className="border-2 border-gray-800 hover:opacity-100 transition-opacity duration-200  text-gray-800 opacity-80 font-normal px-4 py-2 rounded " onClick={() => {
               element.play()
               setTapMe(false)
             }}

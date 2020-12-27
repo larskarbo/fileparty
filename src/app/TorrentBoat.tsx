@@ -123,7 +123,7 @@ function TorrentBoat({
 
         <div className="w-6 flex relative items-center justify-center">
           <DropdownMenu options={[
-            { name: "Delete", onClick: onDelete }
+            { name: "Remove", onClick: onDelete }
           ]} />
         </div>
         <div className="w-12 flex justify-center">
@@ -185,7 +185,7 @@ function TorrentBoat({
                 )}
             </>
           }
-          {(torrent?.done && (streamable || file.size < 100000000)) &&
+          {torrent?.done &&
             <Button
               onClick={() => {
                 torrent.files[0].getBlobURL(function (err, url) {

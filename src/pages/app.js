@@ -20,12 +20,12 @@ function App() {
     <Router basepath="/">
       {/* <Admin user={user} path="/admin" /> */}
       {/* <div user={user} path="/:boardId">Hey</div> */}
-      <Create user={user} loading={loading} path="/create" />
+      <Create user={user} loading={loading} path="/app/create" />
 
-      <Login user={user} path="/login" />
-      <Logout path="/logout" />
+      <Login user={user} path="/app/login" />
+      <Logout path="/app/logout" />
       {/* <Login path="/login" /> */}
-      <Board path="/room/:boardId" />
+      <Board path="/app/:boardId" />
     </Router>
   );
 }

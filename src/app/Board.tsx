@@ -15,6 +15,7 @@ import {
   FaCheck,
   FaCopy,
   FaDownload,
+  FaFile,
   FaLink,
   FaLock,
   FaUpload,
@@ -56,7 +57,7 @@ function Board({ boardId }) {
     return () => clearInterval(interval);
   }, [client]);
 
-  const link = "https://fileparty.co/" + boardId;
+  const link = "https://fileparty.co/app/" + boardId;
   const [isCopied, setCopied] = useClipboard(link);
 
   // const [torrents, setTorrents] = useState([]);
@@ -89,7 +90,7 @@ function Board({ boardId }) {
       //   setTorrent(null)
       // }
 
-      
+
       setFile(data || {});
       setLoaded(true);
       // updateStarCount(postElement, data);
@@ -103,7 +104,7 @@ function Board({ boardId }) {
       const data = snapshot.val();
 
       setPlayingNow(data);
-      
+
     });
     // return () => ref.off()
   }, [boardId]);
@@ -165,7 +166,7 @@ function Board({ boardId }) {
 
   return (
     <Layout>
-      <div className="flex flex-row text-xs mb-3 mt-2 max-w-sm">
+      <div className="flex flex-row text-xs mb-3 mt-2 max-w-md">
         <div
           className="bg-gray-100 p-2 flex flex-row text-gray-500
             border-t border-b border-l rounded-l
@@ -181,7 +182,7 @@ function Board({ boardId }) {
         />
         <button
           onClick={setCopied}
-          className="bg-gray-0 p-2 flex flex-row text-gray-500
+          className="bg-white p-2 flex flex-row text-gray-500
             border-t border-b border-r border-l rounded-r"
         >
           copy{" "}
@@ -191,90 +192,100 @@ function Board({ boardId }) {
               <FaCopy className="ml-1 m-auto" />
             )}
         </button>
+
+        <button
+          onClick={getRootProps().onClick}
+          className="ml-4 bg-white p-2 flex flex-row text-gray-500
+            border-t border-b border-r border-l rounded"
+        >
+          Select file {" "}
+          <FaUpload className="ml-1 m-auto" />
+        </button>
       </div>
-      
+
 
       <input {...getInputProps()} />
 
       <div
         className={
-          "rounded bg-gray-200 relative flex flex-grow h-full border border-gray-300 shadow-lg " +
+          "rounded bg-gray-200 relative flex flex-grow h-full border border-gray-300 shadow-lg group " +
           (isDragActive && "border-yellow-500 border-dashed")
         }
 
         {...getRootProps()}
-        {...(file && { onClick: undefined })}
+        {...(file?.name && { onClick: undefined })}
       >
-        
-          {file?.name ?
-            <>
-              <div className="absolute z-20 left-2 bottom-10">
-                <TorrentBoat
-                  torrent={torrent?.magnetURI == file?.magnet ? torrent : null}
-                  // onFinish={() => {
-                  //   torrent.done = true
-                  //   setTorrent(torrent);
-                  // }}
-                  user={user}
-                  file={file}
-                  playingNow={playingNow}
-                  client={client}
-                  onSetTorrent={(torrent) => {
-                    setTorrent(torrent);
-                  }}
-                  onRemoveTorrent={() => {
-                    client.torrents.forEach(torrent => {
-                      client.remove(torrent.magnetURI)
-                    })
-                    setTorrent(null)
-                  }}
-                  onDelete={(torrent) => {
-                    // try {
-                    //   client.remove(file.magnet)
-                    // } catch (_) { }
-                    // ref.child("items").child(key).remove();
-                    // if (playingNow?.key == key) {
-                    //   ref.child("playingNow").set({})
-                    // }
-                  }}
-                  onPlay={() => {
-                  }}
-                  onUnPlay={() => {
-                  }}
-                />
-              </div>
-              <Media
 
-                isDragActive={isDragActive}
-                playingNow={playingNow}
+        {file?.name ?
+          <>
+            <div className="absolute z-20 left-2 bottom-10 group-hover:opacity-100 opacity-0 transition-opacity duration-150">
+              <TorrentBoat
                 torrent={torrent?.magnetURI == file?.magnet ? torrent : null}
+                // onFinish={() => {
+                //   torrent.done = true
+                //   setTorrent(torrent);
+                // }}
+                user={user}
                 file={file}
-                onSetPlayingNow={(obj) => {
-                  ref.child("playingNow").set({
-                    ...playingNow,
-                    ...obj,
-                  });
+                playingNow={playingNow}
+                client={client}
+                onSetTorrent={(torrent) => {
+                  setTorrent(torrent);
+                }}
+                onRemoveTorrent={() => {
+                  client.torrents.forEach(torrent => {
+                    client.remove(torrent.magnetURI)
+                  })
+                  setTorrent(null)
+                }}
+                onDelete={(torrent) => {
+                  client.torrents.forEach(torrent => {
+                    client.remove(torrent.magnetURI)
+                  })
+                  setTorrent(null)
+                  ref.child("file").set(null);
+                }}
+                onPlay={() => {
+                }}
+                onUnPlay={() => {
                 }}
               />
-            </>
-            :
+            </div>
+            <Media
 
-            !isDragActive && <p>
+              isDragActive={isDragActive}
+              playingNow={playingNow}
+              torrent={torrent?.magnetURI == file?.magnet ? torrent : null}
+              file={file}
+              onSetPlayingNow={(obj) => {
+                ref.child("playingNow").set({
+                  ...playingNow,
+                  ...obj,
+                });
+              }}
+            />
+          </>
+          :
+
+          !isDragActive &&
+          <div className="absolute top-0 right-0 left-0 bottom-0 flex items-center justify-center">
+            <p>
               Drag and drop <strong>images</strong>,{" "}
               <strong>audio</strong>, <strong>video</strong> or other
                 files here, or click to select
               </p>
+          </div>
 
 
-          }
-          {isDragActive && (
-            <div className="absolute opacity-50 bg-yellow-300 top-0 right-0 left-0 bottom-0 flex items-center justify-center">
-              <p>Drop the files to add them ...</p>
-            </div>
-          )}
+        }
+        {isDragActive && (
+          <div className="absolute opacity-50 bg-yellow-300 top-0 right-0 left-0 bottom-0 flex items-center justify-center">
+            <p>Drop the files to add them ...</p>
+          </div>
+        )}
 
       </div>
-     
+
       <div className="flex flex-col-reverse lg:flex-row justify-between pt-5 pb-6 ">
         <div className=" ml-2 text-xs pr-4 text-gray-700 opacity-80">
           Powered by{" "}
@@ -315,6 +326,8 @@ const Feeback = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    console.log(process.env)
+    console.log(process.env.GATSBY_ENV)
     setText("");
     if (first) {
       setFirst(false);

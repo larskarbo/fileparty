@@ -33,7 +33,7 @@ function Intro() {
         <div className="relative mb-3">
 
           <button className="rounded mx-2 text-center font-normal w-40 p-3 px-5  bg-blue-500 text-white">Create room</button>
-          <Link to="/create" className="rounded mx-2 text-center font-normal w-40 p-3 px-5 opacity-0 absolute left-0 z-20" >Create room</Link>
+          <Link to="/app/create" className="rounded mx-2 text-center font-normal w-40 p-3 px-5 opacity-0 absolute left-0 z-20" >Create room</Link>
         </div>
         <div className="relative">
           <div className=" 

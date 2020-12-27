@@ -27,7 +27,7 @@ function Login({user}) {
 
   useEffect(() => {
     if(isGoogle){
-      navigate("/create", {replace: true})
+      navigate("/app/create", {replace: true})
     }
   }, [isGoogle])
 
