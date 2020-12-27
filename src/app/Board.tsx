@@ -326,8 +326,6 @@ const Feeback = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(process.env)
-    console.log(process.env.GATSBY_ENV)
     setText("");
     if (first) {
       setFirst(false);
