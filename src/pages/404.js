@@ -1,8 +1,6 @@
 import React, { useCallback, useContext } from "react";
 
 function NotFound() {
-  const { user } = useContext(UserContext);
-
 
 
   return (
