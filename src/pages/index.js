@@ -12,7 +12,8 @@ import Media from "../app/Media";
 import { graphql, Link } from 'gatsby';
 import { LarsKarbo } from "../templates/LarsKarbo";
 import { Show } from "../templates/Show/Show";
-
+import Helmet from "react-helmet"
+import SEO from "../templates/seo"
 
 function Intro() {
   const { user } = useContext(UserContext);
@@ -23,6 +24,8 @@ function Intro() {
     <div
       className="flex flex-col bg-gradient-to-tr  from-gray-100 pt-0 to-yellow-50 min-h-screen"
     >
+
+      <SEO />
       <h1 className="text-5xl font-bold text-black text-center pt-40 pb-10">
         <div className="mb-1">FileParty lets you</div>
         <div className="bg-blue-200 inline-block text-blue-800 rounded-md p-2 px-4">

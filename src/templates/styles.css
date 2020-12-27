@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+.heightMan {
+    height: 500px;
+}
+
+.heightMan:fullscreen {
+    height: calc(100vh-20px);
+}
+
 .text-2xs {
     font-size: 0.6rem;
     line-height: 0.75rem;

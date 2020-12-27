@@ -31,6 +31,8 @@ const icons = {
 
 function TorrentBoat({
   onSetTorrent,
+  done,
+  setDone,
   playingNow,
   file,
   onDelete,
@@ -60,17 +62,18 @@ function TorrentBoat({
     console.log("ADDING")
     console.log('file.magnet: ', file.magnet);
     client.add(file.magnet, {
-      // announce: ["wss://tracker.fileparty.co"]
+      announce: ["wss://tracker.fileparty.co"]
     }, function (torrent) {
+      
       onSetTorrent(torrent);
     });
-  }, [startedDownloading]);
+  }, [startedDownloading, torrent?.magnetURI]);
 
   useEffect(() => {
     if (startedDownloading && progress == 0) {
       const timeout = setTimeout(() => {
         setWarningStale(true)
-      }, 4000)
+      }, 8000)
       return () => clearTimeout(timeout)
     } else {
       if (warningStale) {
@@ -80,24 +83,34 @@ function TorrentBoat({
   }, [startedDownloading, progress]);
 
   useEffect(() => {
+    console.log("TORRENT CHANGED")
     if (!torrent) {
+      console.log("TORRENT false", torrent)
       return;
     }
     console.log("adding bunch of handlers")
     setProgress(torrent.progress);
 
-    torrent.on('download', () => {
-      setProgress(torrent.progress);
-    })
     torrent.on('noPeers', function (announceType) {
       console.log("no peers")
     })
-    torrent.on('done', function () {
-      console.log("IT IS DONE!!")
-      torrent.done = true
-      // onFinish();
-    })
-  }, [torrent]);
+
+    if(torrent.progress == 1){
+      setDone(true)
+    } else {
+      torrent.on('download', () => {
+        setProgress(torrent.progress);
+        console.log(torrent.progress)
+        if(torrent.progress == 1){
+          setDone(true)
+        }
+      })
+      torrent.on('done', function () {
+        setDone(true)
+      })
+
+    }
+  }, [torrent?.magnetURI]);
 
   const reload = () => {
     console.log(torrent)
@@ -159,7 +172,7 @@ function TorrentBoat({
           </div>
         </div>
         <div className=" flex  flex-row text-center justify-end items-center">
-          {!torrent?.done &&
+          {!done &&
             <>
               {startedDownloading ? (
                 <Button
@@ -185,7 +198,7 @@ function TorrentBoat({
                 )}
             </>
           }
-          {torrent?.done &&
+          {done &&
             <Button
               onClick={() => {
                 torrent.files[0].getBlobURL(function (err, url) {

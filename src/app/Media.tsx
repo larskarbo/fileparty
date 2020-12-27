@@ -5,8 +5,9 @@ import Present from "./graphics/present.inline.svg";
 import Timeline from './Timeline/Timeline';
 import canAutoPlay from 'can-autoplay';
 import captureFrame from "capture-frame"
+import { BsFullscreen } from 'react-icons/bs';
 type mediaType = "no-media" | "video" | "image" | "audio" | "file" | "not-loaded"
-function Media({ onSetPlayingNow, playingNow, torrent, file, setCanAutoPlay }) {
+function Media({ onSetPlayingNow, adding, playingNow, torrent, file, setCanAutoPlay, done  }) {
 
   const imageRef = useRef();
   const videoRef = useRef();
@@ -23,7 +24,6 @@ function Media({ onSetPlayingNow, playingNow, torrent, file, setCanAutoPlay }) {
   const [element, setElement] = useState(null)
   const [tapMe, setTapMe] = useState(false)
   const [muted, setMuted] = useState(false)
-  const [asdf, setAsdf] = useState(0)
 
   useEffect(() => {
 
@@ -48,23 +48,20 @@ function Media({ onSetPlayingNow, playingNow, torrent, file, setCanAutoPlay }) {
       return
     }
 
-    if(file.name.includes(".mp4")){
+    if (file.name.includes(".mp4")) {
 
-    } else if (torrent.progress < 1){
-      torrent.on('done', function () {
-        setAsdf(Math.random())
-      })
+    } else if (!done) {
       return
     }
 
     setMediaType(file.type)
 
     console.log('file.type: ', file.type);
-    if(file.type=="file"){
+    if (file.type == "file") {
       console.log("TODO render file")
     } else {
 
-      if(file.size > 200000000 && !file.name.includes(".mp4")){
+      if (file.size > 200000000 && !file.name.includes(".mp4")) {
         return setMediaType("file")
       }
       const element = refs[file.type].current
@@ -81,7 +78,7 @@ function Media({ onSetPlayingNow, playingNow, torrent, file, setCanAutoPlay }) {
 
     // mainRef.current
     // return () => ref.off()
-  }, [file, torrent, asdf]);
+  }, [file, torrent, done]);
 
   useEffect(() => {
     // setLoaded(false);
@@ -100,9 +97,7 @@ function Media({ onSetPlayingNow, playingNow, torrent, file, setCanAutoPlay }) {
           console.log("attempting to play")
           element.play()
             .catch(playError => {
-              console.log("🚀 ~ playError", playError)
-              // alert("can't play")
-              if("permission thing"){
+              if (playError?.message.includes("denied.permission")) {
                 setTapMe(true)
               }
             })
@@ -173,9 +168,9 @@ function Media({ onSetPlayingNow, playingNow, torrent, file, setCanAutoPlay }) {
   }
 
   return (
-    <div className="flex flex-col justify-between w-full" ref={contRef}>
-      <div className="flex items-center justify-center relative w-full"  style={{
-        height: 500
+    <div className="flex flex-col justify-between w-full " ref={contRef}>
+      <div className="flex items-center justify-center relative w-full h-full heightMan " style={{
+        // height: 500
       }}>
 
         <div className={classNames(
@@ -206,8 +201,8 @@ function Media({ onSetPlayingNow, playingNow, torrent, file, setCanAutoPlay }) {
           <div>
             Waiting for host to add files...
               </div>
-        
-        
+
+
         </div>
         <div className={classNames(
           (mediaType != "file") && "hidden",
@@ -256,6 +251,11 @@ function Media({ onSetPlayingNow, playingNow, torrent, file, setCanAutoPlay }) {
             >Tap to allow playback 📣</button>
           </div>
         }
+        {adding &&
+          <div className="absolute bg-gray-200 text-xs top-0 bottom-0 right-0 left-0 flex items-center justify-center">
+            Adding {adding}...
+          </div>
+        }
         <audio
           ref={audioRef}
           className={classNames(
@@ -271,20 +271,31 @@ function Media({ onSetPlayingNow, playingNow, torrent, file, setCanAutoPlay }) {
           )}
         /> */}
       </div>
-      
-      <div className="h-8 bg-gray-800 border-t border-gray-500">
-        {(mediaType == "video" || mediaType == "audio") &&
-          <Timeline element={element}
-            onPlay={onPlay}
-            requestFullScreen={requestFullScreen}
 
-            onPause={onPause}
-            onSeek={onSeek}
-            playingNow={playingNow}
-            muted={muted}
-            setMuted={setMuted}
-          />
-        }
+      <div className="h-8 bg-gray-800 border-t border-gray-500">
+        <div
+
+          className="h-full w-full flex flex-row "
+        >
+          {(mediaType == "video" || mediaType == "audio") &&
+
+            <Timeline element={element}
+              onPlay={onPlay}
+              requestFullScreen={requestFullScreen}
+
+              onPause={onPause}
+              onSeek={onSeek}
+              playingNow={playingNow}
+              muted={muted}
+              setMuted={setMuted}
+            />
+
+          }
+
+          <div className="text-white flex items-center">
+            <button onClick={() => requestFullScreen()} className=" px-2 h-full"><BsFullscreen /></button>
+          </div>
+        </div>
       </div>
     </div>
   );

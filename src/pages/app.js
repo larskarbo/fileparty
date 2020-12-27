@@ -12,12 +12,17 @@ import Login from '../app/Login';
 import { UserContext } from '../templates/FirebaseInit';
 import Create from '../app/Create';
 import Logout from '../app/Logout';
+import SEO from "../templates/seo";
+import { Helmet } from 'react-helmet';
 
 
 function App() {
   const { user, loading } = useContext(UserContext)
   return (
     <Router basepath="/">
+      <Helmet>
+        <meta name="robots" content="noindex" />
+      </Helmet>
       {/* <Admin user={user} path="/admin" /> */}
       {/* <div user={user} path="/:boardId">Hey</div> */}
       <Create user={user} loading={loading} path="/app/create" />

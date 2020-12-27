@@ -55,10 +55,7 @@ function Timeline({ element
     </div>
   }
   return (
-    <div
-
-      className="h-full w-full flex flex-row "
-    >
+    <>
       {playingNow &&
         <>
           <div className="text-white flex items-center">
@@ -87,12 +84,9 @@ function Timeline({ element
           <div className="text-white flex items-center px-2">
             <button onClick={() => setMuted(!muted)} className=" px-2 h-full">{muted ? <FaVolumeMute /> : <FaVolumeUp />}</button>
           </div>
-          <div className="text-white flex items-center">
-            <button onClick={() => requestFullScreen()} className=" px-2 h-full"><BsFullscreen /></button>
-          </div>
         </>
       }
-    </div>
+    </>
   );
 }
 

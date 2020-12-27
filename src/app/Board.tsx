@@ -45,6 +45,7 @@ function Board({ boardId }) {
 
   const [downloadSpeed, setDownloadSpeed] = useState(0);
   const [uploadSpeed, setUploadSpeed] = useState(0);
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
     if (!client) {
@@ -65,6 +66,7 @@ function Board({ boardId }) {
   const [playingNow, setPlayingNow] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [torrent, setTorrent] = useState(null);
+  const [adding, setAdding] = useState(false);
 
   const ref = useMemo(() => firebase.database().ref(`boards/${boardId}`), [
     boardId,
@@ -115,12 +117,14 @@ function Board({ boardId }) {
       client.remove(torrent.magnetURI)
     })
     setTorrent(null);
-    ref.child("file").set(null);
+    setAdding(rawFile.name);
+    // ref.child("file").set(null);
     client.seed([rawFile], {
       name: rawFile.name,
       announce: ["wss://tracker.fileparty.co"]
     }, function (torrent) {
       setTorrent(torrent);
+      setDone(false)
       ref.child("file").set({
         name: rawFile.name,
         magnet: torrent.magnetURI,
@@ -132,8 +136,12 @@ function Board({ boardId }) {
         state: "paused",
         position: 0
       });
+
+    setAdding(false);
     }, function (torrent) {
       torrent.on("error", function (err) {
+
+    setAdding(false);
         if (err.message.includes("duplicate")) {
           console.log("duplicate!!!")
           // const infoHash = err.message.split("Cannot add duplicate torrent ")[1]
@@ -218,18 +226,21 @@ function Board({ boardId }) {
 
         {file?.name ?
           <>
-            <div className="absolute z-20 left-2 bottom-10 group-hover:opacity-100 opacity-0 transition-opacity duration-150">
+            <div className={"absolute z-20 left-2 bottom-10  transition-opacity duration-150 group-hover:opacity-100 " + (playingNow?.state == "playing" ? "opacity-0" : "opacity-100")}>
               <TorrentBoat
                 torrent={torrent?.magnetURI == file?.magnet ? torrent : null}
-                // onFinish={() => {
-                //   torrent.done = true
-                //   setTorrent(torrent);
-                // }}
+                onFinish={() => {
+                  torrent.done = true
+                  setTorrent(torrent);
+                }}
                 user={user}
                 file={file}
                 playingNow={playingNow}
                 client={client}
+                setDone={setDone}
+                done={done}
                 onSetTorrent={(torrent) => {
+                  setDone(false)
                   setTorrent(torrent);
                 }}
                 onRemoveTorrent={() => {
@@ -252,7 +263,8 @@ function Board({ boardId }) {
               />
             </div>
             <Media
-
+            done={done}
+              adding={adding}
               isDragActive={isDragActive}
               playingNow={playingNow}
               torrent={torrent?.magnetURI == file?.magnet ? torrent : null}
