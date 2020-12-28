@@ -29,6 +29,11 @@ export const LarsKarbo = () => {
         </div>
       </a>
 
+      <a href="https://www.producthunt.com/posts/fileparty?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-fileparty" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=279320&theme=light" alt="FileParty - Watch local files together in real time | Product Hunt"
+      //  style="width: 250px; height: 54px;"
+      className="mt-6"
+        width="250" height="54" /></a>
+
     </div>
   );
 };
