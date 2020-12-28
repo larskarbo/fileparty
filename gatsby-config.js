@@ -22,12 +22,12 @@ module.exports = {
     `gatsby-plugin-netlify`,
     `gatsby-transformer-sharp`, `gatsby-plugin-sharp`,
     `gatsby-plugin-react-helmet`,
-    // {
-    //   resolve: `gatsby-plugin-google-analytics`,
-    //   options: {
-    //     trackingId: "UA-180174227-1",
-    //   },
-    // },
+    {
+      resolve: `gatsby-plugin-google-analytics`,
+      options: {
+        trackingId: "UA-186177730-1",
+      },
+    },
     {
       resolve: `gatsby-plugin-canonical-urls`,
       options: {
