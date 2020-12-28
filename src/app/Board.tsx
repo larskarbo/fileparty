@@ -142,27 +142,7 @@ function Board({ boardId }) {
       torrent.on("error", function (err) {
 
         setAdding(false);
-        if (err.message.includes("duplicate")) {
-          console.log("duplicate!!!")
-          // const infoHash = err.message.split("Cannot add duplicate torrent ")[1]
-          // // onRemoveTorrentByInfoHash(infoHash)
-          // // if(client.torrents.find(t=> t.magnetURI))
-          // //try again
-          // client.seed([rawFile], {
-          //   name: rawFile.name,
-          //   announce: ["wss://tracker.fileparty.co"]
-          // }, function (torrent) {
-          //   console.log("added duplicate torrent", torrent)
-          //   onSetTorrent(torrent);
-          // }, function (torrent) {
-          //   onDestroy()
-          // })
-
-
-        } else {
-          console["log"]("error!", err.message)
-
-        }
+        alert(err.message)
       })
     })
   }, [user]);
