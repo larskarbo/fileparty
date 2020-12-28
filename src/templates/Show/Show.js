@@ -17,22 +17,6 @@ export const Show = ({ data }) => {
 
 
 
-  useEffect(() => {
-    if (mainLars) {
-      // if () {
-      // } else {
-      const test = function () {
-
-        mainLars.current.play();
-
-      }
-      // }
-      mainLars.current.addEventListener('loadeddata', test);
-      return () => mainLars.current?.removeEventListener('loadeddata', test);
-    }
-
-  }, [mainLars]);
-
 
   return (
     <div>

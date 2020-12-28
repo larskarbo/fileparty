@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import GatsbyImage from 'gatsby-image';
 import { useStaticQuery, graphql } from 'gatsby';
 import ShareLink from 'react-twitter-share-link'
-import { FaTwitter } from "react-icons/fa";
+import { FaPlay, FaTwitter } from "react-icons/fa";
 
 export const BigMan = ({ mainLars, active, controls, buttons, player,
   setPaused, setProgr, paused, setPlayer, setButtons, setActive
@@ -22,6 +22,7 @@ export const BigMan = ({ mainLars, active, controls, buttons, player,
   `)
   const [waitingToStart, setWaitingToStart] = useState(false);
   const [videoAbove, setVideoAbove] = useState(true);
+  const [started, setStarted] = useState(false);
   const scale = 1.5;
 
 
@@ -171,7 +172,21 @@ export const BigMan = ({ mainLars, active, controls, buttons, player,
                 " target='_blank'><FaTwitter className="mr-1" /> Share</a>
               )}
             </ShareLink>
-          </div>}
+          </div>
+          }
+          {!started &&
+          <div className="flex flex-col h-full justify-center items-center">
+            <button
+              onClick={() => {
+                mainLars.current.currentTime = 0;
+                setStarted(true)
+                mainLars.current.play();
+                setWaitingToStart(false);
+              }}
+              className="flex flex-row items-center border-2 mb-4 border-gray-50 hover:opacity-100 transition-opacity duration-200  text-gray-50 opacity-80 font-normal px-4 py-2 rounded">
+                <FaPlay className="mr-1" />Start demo</button>
+          </div>
+          }
 
 
       </div>
