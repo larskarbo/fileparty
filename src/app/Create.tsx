@@ -9,13 +9,8 @@ import cryptoRandomString from 'crypto-random-string';
 import moment from 'moment';
 
 function Create({ loading, user }) {
-  const isGoogle = (user && !user.isAnonymous)
   useEffect(() => {
-    console.log("🚀 ~ [loading, isGoogle]", [loading, isGoogle])
-    if (!loading && !isGoogle) {
-      navigate("/app/login", {replace: true})
-    }
-    if (!loading && isGoogle) {
+    if (!loading) {
       const boardId = cryptoRandomString({ length: 6 });
       firebase
         .database()
@@ -41,7 +36,7 @@ function Create({ loading, user }) {
             .set(firebase.database.ServerValue.increment(1));
         });
     }
-  }, [loading, isGoogle])
+  }, [loading])
 
 
   return (

@@ -137,11 +137,11 @@ function Board({ boardId }) {
         position: 0
       });
 
-    setAdding(false);
+      setAdding(false);
     }, function (torrent) {
       torrent.on("error", function (err) {
 
-    setAdding(false);
+        setAdding(false);
         if (err.message.includes("duplicate")) {
           console.log("duplicate!!!")
           // const infoHash = err.message.split("Cannot add duplicate torrent ")[1]
@@ -174,41 +174,55 @@ function Board({ boardId }) {
 
   return (
     <Layout>
-      <div className="flex flex-row text-xs mb-3 mt-2 max-w-md">
-        <div
-          className="bg-gray-100 p-2 flex flex-row text-gray-500
-            border-t border-b border-l rounded-l
-            "
-        >
-          <FaLink className="ml-0 m-auto" />
-        </div>
-        <input
-          className=" p-2 border-0 border-t border-b flex flex-grow"
-          type=""
-          value={link}
-          onChange={() => { }}
-        />
-        <button
-          onClick={setCopied}
-          className="bg-white p-2 flex flex-row text-gray-500
-            border-t border-b border-r border-l rounded-r"
-        >
-          copy{" "}
-          {isCopied ? (
-            <FaCheck className="ml-1 m-auto" />
-          ) : (
-              <FaCopy className="ml-1 m-auto" />
-            )}
-        </button>
+      <div className="flex flex-row text-xs mb-3 mt-2 justify-between">
+        <div className="flex flex-row max-w-md">
+          <div
+            className="bg-gray-100 p-2 flex flex-row text-gray-500
+              border-t border-b border-l rounded-l
+              "
+          >
+            <FaLink className="ml-0 m-auto" />
+          </div>
+          <input
+            className=" p-2 border-0 border-t border-b flex flex-grow"
+            type=""
+            value={link}
+            onChange={() => { }}
+          />
+          <button
+            onClick={setCopied}
+            className="bg-white p-2 flex flex-row text-gray-500
+              border-t border-b border-r border-l rounded-r"
+          >
+            copy{" "}
+            {isCopied ? (
+              <FaCheck className="ml-1 m-auto" />
+            ) : (
+                <FaCopy className="ml-1 m-auto" />
+              )}
+          </button>
 
-        <button
-          onClick={getRootProps().onClick}
-          className="ml-4 bg-white p-2 flex flex-row text-gray-500
-            border-t border-b border-r border-l rounded"
-        >
-          Select file {" "}
-          <FaUpload className="ml-1 m-auto" />
-        </button>
+          <button
+            onClick={getRootProps().onClick}
+            className="ml-4 bg-white p-2 flex flex-row text-gray-500
+              border-t border-b border-r border-l rounded"
+          >
+            Select file {" "}
+            <FaUpload className="ml-1 m-auto" />
+          </button>
+        </div>
+
+        <div>
+          <a href="https://www.buymeacoffee.com/larskarbo" target="_blank"><img
+            className=""
+            src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" style={{
+              height: 60/1.7,
+              width: 217/1.7,
+              maxWidth: "auto"
+            }} /></a>
+        </div>
+
+
       </div>
 
 
@@ -263,7 +277,7 @@ function Board({ boardId }) {
               />
             </div>
             <Media
-            done={done}
+              done={done}
               adding={adding}
               isDragActive={isDragActive}
               playingNow={playingNow}
@@ -284,7 +298,7 @@ function Board({ boardId }) {
             <p>
               Drag and drop <strong>images</strong>,{" "}
               <strong>audio</strong>, <strong>video</strong> or other
-                files here, or click to select
+                files here
               </p>
           </div>
 
@@ -292,7 +306,7 @@ function Board({ boardId }) {
         }
         {isDragActive && (
           <div className="absolute opacity-50 bg-yellow-300 top-0 right-0 left-0 bottom-0 flex items-center justify-center">
-            <p>Drop the files to add them ...</p>
+            <p>Drop the file to add it...</p>
           </div>
         )}
 

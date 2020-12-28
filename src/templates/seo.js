@@ -5,18 +5,20 @@ import Helmet from "react-helmet"
 
 // lag dei 1220 x 630
 
-function SEO() {
+function SEO({
+  title="FileParty - Watch Local Files Together"
+}) {
 
   return (
     <Helmet>
-      <title>FileParty</title>
-      <meta property="og:title" content="FileParty" />
-      <meta name="twitter:title" content="FileParty " />
-      <meta name="title" content="FileParty" />
+      <title>{title}</title>
+      <meta property="og:title" content={title} />
+      <meta name="twitter:title" content={title} />
+      <meta name="title" content={title} />
 
-      <meta name="description" content="FileParty is the best app for watching movies together" />
-      <meta property="og:description" content="FileParty is the best app for watching movies together" />
-      <meta name="twitter:description" content=" FileParty is the best app for watching movies together" />
+      <meta name="description" content="Watch local files together in real time. Drag and drop any file and it will be transfered to everyone. Be on the same page" />
+      <meta property="og:description" content="Watch local files together in real time. Drag and drop any file and it will be transfered to everyone. Be on the same page" />
+      <meta name="twitter:description" content=" Watch local files together in real time. Drag and drop any file and it will be transfered to everyone. Be on the same page" />
 
       <meta property="og:image" content="https://fileparty.co/fileparty-screenshot.png" />
       <meta name="twitter:image" content="https://fileparty.co/fileparty-screenshot.png" />

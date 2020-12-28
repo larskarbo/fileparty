@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import GatsbyImage from 'gatsby-image';
 import { useStaticQuery, graphql } from 'gatsby';
-import { TwitterShareButton } from 'react-share';
+import ShareLink from 'react-twitter-share-link'
+import { FaTwitter } from "react-icons/fa";
 
-export const BigMan = ({ mainLars, active, controls, buttons, player ,
-   setPaused, setProgr, paused, setPlayer, setButtons, setActive
+export const BigMan = ({ mainLars, active, controls, buttons, player,
+  setPaused, setProgr, paused, setPlayer, setButtons, setActive
 }) => {
   const data = useStaticQuery(graphql`
   {
@@ -28,7 +29,7 @@ export const BigMan = ({ mainLars, active, controls, buttons, player ,
     if (mainLars && !paused) {
       const unsubs = [];
       events.forEach(e => {
-        const timeUntil = e.timestamp - mainLars.current.currentTime*1000;
+        const timeUntil = e.timestamp - mainLars.current.currentTime * 1000;
         if (timeUntil < 0) {
           e.action();
         } else if (timeUntil > 0) {
@@ -103,97 +104,104 @@ export const BigMan = ({ mainLars, active, controls, buttons, player ,
   ];
 
   return (
-    
+
     <div className="relative mt-24">
 
-    <video
-      onSeeked={() => {
-        setProgr(Math.round(mainLars.current.currentTime * 1000));
-        console.log(Math.round(mainLars.current.currentTime * 1000));
-      }}
-      onPlay={() => {
-        setProgr(Math.round(mainLars.current.currentTime * 1000));
-        setPaused(false);
-      }}
-      onPause={() => {
-        setPaused(true);
-        // setProgr(mainLars.current.currentTime)
-        console.log(Math.round(mainLars.current.currentTime * 1000));
-      }}
-      onEnded={() => {
-        setWaitingToStart(true);
-      }}
-      ref={mainLars} muted
-      controls={controls}
-      width={200 * scale} src={"/bigman.webm"}
-      className="absolute"
-      style={{
-        top: -130 * scale,
-        left: -99 * scale,
-        zIndex: videoAbove ? 5 : 15
-      }} />
-    <div className="rounded relative overflow-hidden shadow-2xl" style={{
-      width: 300,
-      height: 168,
-      backgroundColor: "#323232",
-      zIndex: 10
-    }}>
-      {(player && player.type == "video") &&
-        <video
-          controls={true}
-          // ref={videoRef}
-          autoPlay
-          muted
-          src={player.value} />}
-      {(player && player.type == "image") &&
-        <GatsbyImage
-          className={"transform transition-transform duration-200 origin-top-right " + (player.zoom ? "scale-125" : "scale-100")}
-          fixed={player.value}
-          style={{
-            width: "100%",
-            height: "100%"
-          }} />}
-      {waitingToStart &&
-        <div className="flex justify-center pt-4">
-          <button
-            onClick={() => {
-              mainLars.current.currentTime = 0;
-              mainLars.current.play();
-              setWaitingToStart(false);
-            }}
-            className="border-2 border-gray-50 hover:opacity-100 transition-opacity duration-200  text-gray-50 opacity-80 font-normal px-4 py-2 rounded">Restart</button>
-          <TwitterShareButton />
-        </div>}
+      <video
+        onSeeked={() => {
+          setProgr(Math.round(mainLars.current.currentTime * 1000));
+          console.log(Math.round(mainLars.current.currentTime * 1000));
+        }}
+        onPlay={() => {
+          setProgr(Math.round(mainLars.current.currentTime * 1000));
+          setPaused(false);
+        }}
+        onPause={() => {
+          setPaused(true);
+          // setProgr(mainLars.current.currentTime)
+          console.log(Math.round(mainLars.current.currentTime * 1000));
+        }}
+        onEnded={() => {
+          setWaitingToStart(true);
+        }}
+        ref={mainLars} muted
+        controls={controls}
+        width={200 * scale} src={"/bigman.webm"}
+        className="absolute"
+        style={{
+          top: -130 * scale,
+          left: -99 * scale,
+          zIndex: videoAbove ? 5 : 15
+        }} />
+      <div className="rounded relative overflow-hidden shadow-2xl" style={{
+        width: 300,
+        height: 168,
+        backgroundColor: "#323232",
+        zIndex: 10
+      }}>
+        {(player && player.type == "video") &&
+          <video
+            controls={true}
+            // ref={videoRef}
+            autoPlay
+            muted
+            src={player.value} />}
+        {(player && player.type == "image") &&
+          <GatsbyImage
+            className={"transform transition-transform duration-200 origin-top-right " + (player.zoom ? "scale-125" : "scale-100")}
+            fixed={player.value}
+            style={{
+              width: "100%",
+              height: "100%"
+            }} />}
+        {waitingToStart &&
+          <div className="flex flex-col h-full justify-center items-center">
+            <button
+              onClick={() => {
+                mainLars.current.currentTime = 0;
+                mainLars.current.play();
+                setWaitingToStart(false);
+              }}
+              className="border-2 mb-4 border-gray-50 hover:opacity-100 transition-opacity duration-200  text-gray-50 opacity-80 font-normal px-4 py-2 rounded">Restart</button>
+            <ShareLink link='https://fileparty.co'>
+              {link => (
+                <a href={link} className="
+                border-2 border-blue-400 hover:opacity-100 transition-opacity duration-200  text-blue-400 opacity-80 font-normal px-4 py-2 rounded
+                flex flex-row items-center
+                " target='_blank'><FaTwitter className="mr-1" /> Share</a>
+              )}
+            </ShareLink>
+          </div>}
+
+
+      </div>
+      <div className="relative flex justify-center">
+
+        <div className="h-4 w-48 bg-red-500 transform rotate-45 absolute rounded -mt-12" style={{
+          backgroundColor: "#323232",
+        }} />
+        <div className="h-4 w-48 bg-red-500 transform -rotate-45 absolute rounded -mt-12" style={{
+          backgroundColor: "#323232",
+        }} />
+      </div>
+      {buttons &&
+        <>
+          <Bop className={(active == "A" && "bg-blue-400")}
+            style={{
+              top: -70
+            }} />
+          <Bop className={(active == "B" && "bg-blue-400")}
+            style={{
+              top: -50
+            }} />
+          <Bop className={(active == "C" && "bg-blue-400")}
+            style={{
+              top: -30
+            }} />
+        </>}
 
 
     </div>
-    <div className="relative flex justify-center">
-
-      <div className="h-4 w-48 bg-red-500 transform rotate-45 absolute rounded -mt-12" style={{
-        backgroundColor: "#323232",
-      }} />
-      <div className="h-4 w-48 bg-red-500 transform -rotate-45 absolute rounded -mt-12" style={{
-        backgroundColor: "#323232",
-      }} />
-    </div>
-    {buttons &&
-      <>
-        <Bop className={(active == "A" && "bg-blue-400")}
-          style={{
-            top: -70
-          }} />
-        <Bop className={(active == "B" && "bg-blue-400")}
-          style={{
-            top: -50
-          }} />
-        <Bop className={(active == "C" && "bg-blue-400")}
-          style={{
-            top: -30
-          }} />
-      </>}
-
-
-  </div>
   );
 };
 

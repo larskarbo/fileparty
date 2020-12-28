@@ -19,16 +19,16 @@ function Intro() {
 
   return (
     <div
-      className="flex flex-col bg-gradient-to-tr  from-gray-100 pt-0 to-yellow-50 min-h-screen"
+      className="flex flex-col bg-gradient-to-tr from-gray-100 pt-0 to-yellow-50 min-h-screen"
     >
 
       <Helmet>
-
         <meta property="og:url" content="https://fileparty.co/" />
         <link rel="canonical" href="https://fileparty.co/" />
       </Helmet>
 
       <SEO />
+
       <h1 className="text-5xl font-bold text-black text-center pt-40 pb-10">
         <div className="mb-1">FileParty lets you</div>
         <div className="bg-blue-200 inline-block text-blue-800 rounded-md p-2 px-4">
@@ -41,18 +41,18 @@ function Intro() {
           <button className="rounded mx-2 text-center font-normal w-40 p-3 px-5  bg-blue-500 text-white">Create room</button>
           <Link to="/app/create" className="rounded mx-2 text-center font-normal w-40 p-3 px-5 opacity-0 absolute left-0 z-20" >Create room</Link>
         </div>
-        <div className="relative">
+        {/* <div className="relative">
           <div className=" 
                 font-light text-gray-600
               " onClick={() => { }}>
-            or <button className="underline font-light">try a demo room</button>
+            or drop a file here
           </div>
           <div className=" 
                 font-light text-gray-600 opacity-0 absolute left-0 top-0 z-20
               " onClick={() => { }}>
-            or <button className="underline font-light">try a demo room</button>
+            or drop a file here
           </div>
-        </div>
+        </div> */}
 
 
 
