@@ -10,7 +10,7 @@ import moment from 'moment';
 
 function Create({ loading, user }) {
   useEffect(() => {
-    if (!loading) {
+    if (user) {
       const boardId = cryptoRandomString({ length: 6 });
       firebase
         .database()
@@ -36,7 +36,7 @@ function Create({ loading, user }) {
             .set(firebase.database.ServerValue.increment(1));
         });
     }
-  }, [loading])
+  }, [user])
 
 
   return (
@@ -47,7 +47,7 @@ function Create({ loading, user }) {
             "flex flex-col flex-grow-0 p-12 max-w-md  w-full rounded bg-white  border border-gray-300 shadow-lg "
           }
         >
-          {loading ? "Loading..." : "Creating..."}
+          {user ? "Creating..." : "Loading..." }
         </div>
       </div>
     </Layout>

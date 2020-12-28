@@ -21,20 +21,6 @@ var firebaseConfig = {
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
-  firebase
-    .auth()
-    .signInAnonymously()
-  .then(() => {
-    // Signed in..
-    console.log("Signed in");
-  })
-  .catch((error) => {
-    var errorCode = error.code;
-    console.log("🚀 ~ errorCode", errorCode);
-    var errorMessage = error.message;
-    console.log("🚀 ~ errorMessage", errorMessage);
-    // ...
-  });
 } else {
   firebase.app(); // if already initialized, use that one
 }
@@ -46,8 +32,22 @@ function FirebaseInit({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    firebase
+      .auth()
+      .signInAnonymously()
+      .then(() => {
+        // Signed in..
+        console.log("Signed in");
+      })
+      .catch((error) => {
+        var errorCode = error.code;
+        console.log("🚀 ~ errorCode", errorCode);
+        var errorMessage = error.message;
+        console.log("🚀 ~ errorMessage", errorMessage);
+        // ...
+      });
     firebase.auth().onAuthStateChanged((user) => {
-      
+
       if (user) {
         console.log("🚀 ~ user", user)
         // User is signed in, see docs for a list of available properties
@@ -69,7 +69,7 @@ function FirebaseInit({ children }) {
   }, []);
 
   return (
-    <UserContext.Provider value={{user, loading}}>
+    <UserContext.Provider value={{ user, loading }}>
       {/* <Intro user={user} path="/" /> */}
       {children}
     </UserContext.Provider>

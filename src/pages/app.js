@@ -30,8 +30,8 @@ function App() {
         {/* <div user={user} path="/:boardId">Hey</div> */}
         <Create user={user} loading={loading} path="/app/create" />
 
-        {/* <Login user={user} path="/app/login" />
-        <Logout path="/app/logout" /> */}
+        {/* <Login user={user} path="/app/login" />*/}
+        <Logout path="/app/logout" /> 
         {/* <Login path="/login" /> */}
         <Board path="/app/:boardId" />
       </Router>
