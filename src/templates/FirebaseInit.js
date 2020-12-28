@@ -21,20 +21,20 @@ var firebaseConfig = {
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
-  // firebase
-  //   .auth()
-  //   .signInAnonymously()
-  // .then(() => {
-  //   // Signed in..
-  //   console.log("Signed in");
-  // })
-  // .catch((error) => {
-  //   var errorCode = error.code;
-  //   console.log("🚀 ~ errorCode", errorCode);
-  //   var errorMessage = error.message;
-  //   console.log("🚀 ~ errorMessage", errorMessage);
-  //   // ...
-  // });
+  firebase
+    .auth()
+    .signInAnonymously()
+  .then(() => {
+    // Signed in..
+    console.log("Signed in");
+  })
+  .catch((error) => {
+    var errorCode = error.code;
+    console.log("🚀 ~ errorCode", errorCode);
+    var errorMessage = error.message;
+    console.log("🚀 ~ errorMessage", errorMessage);
+    // ...
+  });
 } else {
   firebase.app(); // if already initialized, use that one
 }
