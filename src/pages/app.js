@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 // import "../app/index.css";
 
 import Board from "../app/Board";
-// import Admin from "../app/Admin";
+import Admin from "../Admin";
 import { Router, Redirect } from "@reach/router"
 import { Link } from "gatsby"
 import Layout from "../app/Layout";
@@ -26,7 +26,7 @@ function App() {
       <SEO title="FileParty" />
       <Router basepath="/">
 
-        {/* <Admin user={user} path="/admin" /> */}
+        <Admin user={user} path="/app/admin" />
         {/* <div user={user} path="/:boardId">Hey</div> */}
         <Create user={user} loading={loading} path="/app/create" />
 

@@ -16,7 +16,7 @@ export const LarsKarbo = () => {
   }}
   `);
   return (
-    <div className="mt-36 mb-24">
+    <div className="mt-36">
 
       <a href="https://larskarbo.no" target="_blank">
         <div className=" flex items-center border border-gray-200 rounded p-2 px-4

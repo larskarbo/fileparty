@@ -61,6 +61,13 @@ function Intro() {
 
         <LarsKarbo />
 
+        <div className="my-8 font-light text-gray-500 underline text-sm">
+          <Link to="/watch-local-videos-with-friends-online/">5 ways to watch local videos with friends online</Link>
+          
+        </div>
+        <div className="py-10">
+          
+        </div>
       </div>
 
     </div>

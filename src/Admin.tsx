@@ -58,8 +58,9 @@ function Admin({ user }) {
       .once('value').then((snapshot) => {
         // ...
         const stats = snapshot.val()
+        console.log('stats.dates: ', stats.dates);
         const last7Days = Object.entries(stats.dates)
-        // .sort(([a],[b]) => a < b)
+        .reverse()
         .slice(0,7)
         .map((arr:any)=>({
           date: arr[0],

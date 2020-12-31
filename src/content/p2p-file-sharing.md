@@ -1,6 +1,6 @@
 ---
 title: The best way to do P2P file sharing in the browser
-date: 2019-07-10
+date:
 ---
 
 What is the best way to do p2p file sharing in the browser?

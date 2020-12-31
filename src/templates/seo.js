@@ -23,7 +23,7 @@ function SEO({
       <meta property="og:image" content="https://fileparty.co/fileparty-screenshot.png" />
       <meta name="twitter:image" content="https://fileparty.co/fileparty-screenshot.png" />
       
-      <meta property="og:site_name" content="European Travel, Inc." />
+      <meta property="og:site_name" content="FileParty" />
       <meta name="twitter:card" content="summary_large_image" />
 
 
