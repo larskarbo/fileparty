@@ -55,7 +55,7 @@ const Post = ({ data, location }) => {
 
         <article className="max-w-screen-md bg-white px-12 py-12 rounded shadow">
           <h1 className="text-5xl font-medium">{post.frontmatter.title}</h1>
-          <div className="text-gray-600 font-light text-sm py-4">Written by <a href="https://larskarbo.no/">Lars Karbo</a> on {new Date(post.frontmatter.date).toLocaleDateString("en-US")}</div>
+          <div className="text-gray-600 font-light text-sm py-4">Written by <a href="https://larskarbo.no/">Lars Karbo</a> on {post.frontmatter.date}</div>
           <div className="content" dangerouslySetInnerHTML={{ __html: post.html }} />
         </article>
       </div>
@@ -70,7 +70,7 @@ export const query = graphql`
       html
       frontmatter {
         title
-        date
+        date(formatString: "MMMM DD, YYYY")
         excerpt
         hero { 
           childImageSharp {

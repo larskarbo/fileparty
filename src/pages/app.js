@@ -1,14 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-// import logo from "./logo.svg";
-// import "../app/index.css";
 
 import Board from "../app/Board";
 import Admin from "../Admin";
-import { Router, Redirect } from "@reach/router"
-import { Link } from "gatsby"
-import Layout from "../app/Layout";
-// import Intro from "../gatsby/src/pages";
-import Login from '../app/Login';
+import { Router } from "@reach/router"
 import FirebaseInit, { UserContext } from '../templates/FirebaseInit';
 import Create from '../app/Create';
 import Logout from '../app/Logout';

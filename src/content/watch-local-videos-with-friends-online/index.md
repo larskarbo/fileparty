@@ -2,7 +2,7 @@
 title: 5 Ways to Watch Local Videos with Friends Online
 excerpt: No excerpt
 hero: ./5-ways-to-watch-videos-with-friends.png
-date: 2019-07-10
+date: 2020-12-28
 ---
 
 Now, more than ever, it's important to connect and keep in touch with friends. Sometimes you want to watch local videos together with them, but what if they are on the other side of the world? Here are some ways you can stream your local files in sync with your friends.
