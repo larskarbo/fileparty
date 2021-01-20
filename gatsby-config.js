@@ -1,6 +1,7 @@
 module.exports = {
   siteMetadata: {
     title: "Fileparty",
+    siteUrl: "https://fileparty.co"
   },
   plugins: [
     `gatsby-plugin-postcss`,
@@ -70,6 +71,12 @@ module.exports = {
         rule: {
           include: /\.inline\.svg$/
         }
+      }
+    },
+    {
+      resolve: `gatsby-plugin-sitemap`,
+      options: {
+
       }
     }
   ],
