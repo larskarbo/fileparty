@@ -386,7 +386,7 @@ const Feeback = () => {
           value={text}
           onChange={(e) => setText(e.target.value)}
           className="w-full h-full pl-2 border-0 text-xs text-gray-600"
-          placeholder={first ? "Type instant feedback..." : "you@example.com"}
+          placeholder={first ? "Type instant feedback... (this is not chat!)" : "you@example.com"}
           type="text"
         />
         {text.length > 0 && isFocus && (
