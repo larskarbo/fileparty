@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+
 import React, { useEffect, useRef, useState } from "react";
 import GatsbyImage from 'gatsby-image';
 

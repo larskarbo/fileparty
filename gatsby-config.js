@@ -4,6 +4,12 @@ module.exports = {
     siteUrl: "https://fileparty.co"
   },
   plugins: [
+    {
+      resolve: `gatsby-plugin-plausible`,
+      options: {
+        domain: `fileparty.co`,
+      },
+    },
     `gatsby-plugin-postcss`,
     `gatsby-transformer-remark`,
     {
