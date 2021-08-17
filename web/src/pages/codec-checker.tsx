@@ -6,6 +6,8 @@ import { FaUpload } from "react-icons/fa";
 import { CodecInfo } from "../../../server/types";
 import { SERVER_BASE } from "../app/utils/request";
 import videoFile from "../app/graphics/video-file.svg";
+import { Link } from "@reach/router";
+import logo from "../app/logo.svg";
 
 export default function CodecChecker() {
   const [codecInfo, setCodecInfo] = useState<CodecInfo>(null);
@@ -54,6 +56,17 @@ export default function CodecChecker() {
 
   return (
     <div className="flex flex-col items-center bg-gradient-to-tr px-24 from-gray-100 to-yellow-50 min-h-screen pt-24">
+      <div className="max-w-screen-md w-full mb-12">
+        <div className="flex items-center">
+          <Link to="/" className=" mr-4">
+            <img className="w-12 h-12" src={logo} />
+          </Link>
+
+          <div className="text-2xl  font-light ">
+            FileParty 
+          </div>
+        </div>
+      </div>
       <main className="max-w-screen-md w-full bg-white px-12 py-12 rounded shadow">
         <h1 className="text-4xl font-bold text-black text-center mb-6">
           Video Codec Checker
@@ -93,7 +106,10 @@ export default function CodecChecker() {
                 <img src={videoFile} />
               </div>
               <div className="gap-2 flex flex-col">
-                <div><span className="font-bold">{codecInfo.name}</span> ({prettyBytes(codecInfo.size)})</div>
+                <div>
+                  <span className="font-bold">{codecInfo.name}</span> (
+                  {prettyBytes(codecInfo.size)})
+                </div>
                 {infos.map((line) => (
                   <div className="flex">
                     <div className="w-14  text-gray-600 ">{line[0]}:</div>{" "}
@@ -113,6 +129,16 @@ export default function CodecChecker() {
           </div>
         )}
       </main>
+      
+      <div className="my-8 font-light flex flex-col items-center gap-4 text-gray-500 underline text-sm">
+          <div>
+            <Link to="/codec-checker/">Online Video Codec Checker</Link>
+          </div>
+          <div>
+            <Link to="/watch-local-videos-with-friends-online/">5 ways to watch local videos with friends online</Link>
+          </div>
+          
+        </div>
     </div>
   );
 }
