@@ -1,7 +1,23 @@
 import ky from "ky";
 
 export const BASE = `/.netlify/functions/`;
-export const SERVER_BASE = `http://localhost:3200`
+
+export let isNode;
+
+try {
+  isNode = typeof window == "undefined";
+} catch (e) {
+  isNode = true;
+}
+
+export const isLocal = () => {
+  if (isNode) {
+    return process.env.NODE_ENV == "development";
+  }
+  return typeof location != "undefined" && location?.host?.includes("localhost");
+};
+
+export const SERVER_BASE = isLocal() ? `http://localhost:3210` : `https://server.fileparty.com`
 
 
 let headers = {};

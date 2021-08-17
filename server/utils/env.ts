@@ -1,3 +1,3 @@
 require("dotenv").config();
 
-export const isLocal = process.env.IS_ON_LOCAL;
+export const isDev = process.env.NODE_ENV === "development";
