@@ -1,0 +1,9 @@
+{
+  "watch": ["."],
+  "ext": ".ts,.js",
+  "ignore": [],
+  "exec": "ts-node --transpile-only ./server.ts",
+  "env": {
+    "NODE_ENV": "development"
+  }
+}
