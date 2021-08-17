@@ -35,51 +35,61 @@ export default function CodecChecker() {
     maxSize: 2 * 1024 * 1024 * 1024,
   });
 
+  console.log("getRootProps():", getRootProps());
+
   return (
-    <div className="flex flex-col bg-gradient-to-tr px-24 from-gray-100 pt-0 to-yellow-50 min-h-screen">
-      <h1 className="text-5xl font-bold text-black text-center pt-40 pb-10">
-        <div className="mb-1">Video Codec Checker</div>
-      </h1>
+    <div className="flex flex-col items-center bg-gradient-to-tr px-24 from-gray-100 to-yellow-50 min-h-screen pt-24">
+      <main className="max-w-screen-md w-full bg-white px-12 py-12 rounded shadow">
+        <h1 className="text-4xl font-bold text-black text-center mb-6">
+          Video Codec Checker
+        </h1>
+        <h2 className="text-lg font-light text-gray-800 text-center my-6">
+          Check video codec, format and metadata of any video file
+        </h2>
 
-      {!codecInfo && (
-        <div>
-          <button
-            onClick={getRootProps().onClick}
-            className="ml-4 bg-white p-2 flex flex-row text-gray-500
-                border-t border-b border-r border-l rounded"
-          >
-            Select file <FaUpload className="ml-1 m-auto" />
-          </button>
-          <input {...getInputProps()} />
-          <div
-            className={
-              "rounded bg-gray-200 h-20 relative  border border-gray-300 shadow-lg group " +
-              (isDragActive && "border-yellow-500 border-dashed")
-            }
-            {...getRootProps()}
-          >
-            Drop here to upload
-          </div>
-        </div>
-      )}
-
-      {codecInfo && (
-        <div>
+        {!codecInfo && (
           <div>
-            <div>Name: {codecInfo.name}</div>
-            <div>Size: {prettyBytes(codecInfo.size)}</div>
-            <div>
-              Codec: {codecInfo.codec_name} ({codecInfo.codec_long_name})
+            <div
+              className={
+                "rounded  my-4 w-full flex flex-col items-center py-20 justify-center h-20 relative  border border-gray-300 shadow-lg group " +
+                (isDragActive ? "bg-yellow-800 border-dashed" : "bg-gray-700")
+              }
+              {...getRootProps()}
+            >
+              
+              <button
+                onClick={getRootProps().onClick}
+                className="mb-2 bg-white py-2 px-4 flex flex-row text-gray-500
+                border-t border-b border-r border-l rounded"
+              >
+                Select file <FaUpload className="ml-1 m-auto" />
+              </button>
+              <input {...getInputProps()} />
+              <div className="text-xs text-gray-300">Drop a video file here.</div>
             </div>
-            <div>
-              Format: {codecInfo.format_name} ({codecInfo.format_long_name})
-            </div>
-            <div>Height: {codecInfo.height}</div>
-            <div>Width: {codecInfo.width}</div>
           </div>
-          <button onClick={() => setCodecInfo(null)}>Check another one</button>
-        </div>
-      )}
+        )}
+
+        {codecInfo && (
+          <div>
+            <div>
+              <div>Name: {codecInfo.name}</div>
+              <div>Size: {prettyBytes(codecInfo.size)}</div>
+              <div>
+                Codec: {codecInfo.codec_name} ({codecInfo.codec_long_name})
+              </div>
+              <div>
+                Format: {codecInfo.format_name} ({codecInfo.format_long_name})
+              </div>
+              <div>Height: {codecInfo.height}</div>
+              <div>Width: {codecInfo.width}</div>
+            </div>
+            <button onClick={() => setCodecInfo(null)}>
+              Check another one
+            </button>
+          </div>
+        )}
+      </main>
     </div>
   );
 }
