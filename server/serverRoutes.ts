@@ -18,9 +18,7 @@ app.use(
       "http://horse.loc:3000",
       "http://horse.loc:8888",
       "http://papop.local:3000",
-      "https://personate.ai",
-      "https://natto.dev/",
-      "https://natto.bypaulshen.com",
+      "https://fileparty.co",
     ],
   })
 );
