@@ -17,7 +17,7 @@ export const isLocal = () => {
   return typeof location != "undefined" && location?.host?.includes("localhost");
 };
 
-export const SERVER_BASE = isLocal() ? `http://localhost:3210` : `https://server.fileparty.com`
+export const SERVER_BASE = isLocal() ? `http://localhost:3210` : `http://server.fileparty.co:3210`
 
 
 let headers = {};
