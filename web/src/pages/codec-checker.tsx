@@ -8,6 +8,7 @@ import { SERVER_BASE } from "../app/utils/request";
 import videoFile from "../app/graphics/video-file.svg";
 import { Link } from "@reach/router";
 import logo from "../app/logo.svg";
+import SEO from "../templates/seo";
 
 export default function CodecChecker() {
   const [codecInfo, setCodecInfo] = useState<CodecInfo>(null);
@@ -56,6 +57,7 @@ export default function CodecChecker() {
 
   return (
     <div className="flex flex-col items-center bg-gradient-to-tr px-24 from-gray-100 to-yellow-50 min-h-screen pt-24">
+      <SEO title="Video Codec Checker - FileParty" />
       <div className="max-w-screen-md w-full mb-12">
         <div className="flex items-center">
           <Link to="/" className=" mr-4">
