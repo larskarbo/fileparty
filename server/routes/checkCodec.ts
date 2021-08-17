@@ -5,6 +5,7 @@ import { mkdirp, mkdtemp, remove, rmdir } from "fs-extra";
 import { tmpdir } from "os";
 import path from "path";
 import { CodecInfo } from "../types";
+import { slackNotify } from "../utils/slackNotify";
 
 export default async function checkCodec(req: Request, res: Response) {
   const tempPath = await mkdtemp(path.join(tmpdir(), "fileparty-"));
@@ -29,9 +30,9 @@ export default async function checkCodec(req: Request, res: Response) {
   // console.log('file: ', file);
 
   const videoInfo: {
-    streams: CodecInfo[];
+    streams: any;
+    format: any;
   } = await ffprobe(filePath);
-  console.log("res: ", videoInfo);
 
   await remove(filePath);
   await rmdir(tempPath);
@@ -46,6 +47,8 @@ export default async function checkCodec(req: Request, res: Response) {
     name: file.name,
     size: file.size,
   };
+
+  slackNotify("Someone checked codec", codecInfo)
 
   res.json({
     fields,

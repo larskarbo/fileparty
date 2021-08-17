@@ -1,10 +1,11 @@
 import axios from "axios";
+import prettyBytes from "pretty-bytes";
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { FaUpload } from "react-icons/fa";
-import { SERVER_BASE } from "../app/utils/request";
 import { CodecInfo } from "../../../server/types";
-import prettyBytes from "pretty-bytes";
+import { SERVER_BASE } from "../app/utils/request";
+import videoFile from "../app/graphics/video-file.svg";
 
 export default function CodecChecker() {
   const [codecInfo, setCodecInfo] = useState<CodecInfo>(null);
@@ -22,6 +23,12 @@ export default function CodecChecker() {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        onUploadProgress: function (progressEvent) {
+          var percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          console.log(percentCompleted);
+        },
       })
       .then((asdf) => {
         console.log("asdf: ", asdf.data);
@@ -36,6 +43,14 @@ export default function CodecChecker() {
   });
 
   console.log("getRootProps():", getRootProps());
+  let infos = [];
+  if (codecInfo) {
+    infos = [
+      ["Codec", `${codecInfo.codec_name} (${codecInfo.codec_long_name})`],
+      ["Format", `${codecInfo.format_name} (${codecInfo.format_long_name})`],
+      ["Size", `${codecInfo.width}x${codecInfo.height}`],
+    ];
+  }
 
   return (
     <div className="flex flex-col items-center bg-gradient-to-tr px-24 from-gray-100 to-yellow-50 min-h-screen pt-24">
@@ -52,11 +67,10 @@ export default function CodecChecker() {
             <div
               className={
                 "rounded  my-4 w-full flex flex-col items-center py-20 justify-center h-20 relative  border border-gray-300 shadow-lg group " +
-                (isDragActive ? "bg-yellow-800 border-dashed" : "bg-gray-700")
+                (isDragActive ? "bg-yellow-800 border-dashed" : "bg-gray-600")
               }
               {...getRootProps()}
             >
-              
               <button
                 onClick={getRootProps().onClick}
                 className="mb-2 bg-white py-2 px-4 flex flex-row text-gray-500
@@ -65,28 +79,37 @@ export default function CodecChecker() {
                 Select file <FaUpload className="ml-1 m-auto" />
               </button>
               <input {...getInputProps()} />
-              <div className="text-xs text-gray-300">Drop a video file here.</div>
+              <div className="text-xs text-gray-300">
+                Drop a video file here.
+              </div>
             </div>
           </div>
         )}
 
         {codecInfo && (
           <div>
-            <div>
-              <div>Name: {codecInfo.name}</div>
-              <div>Size: {prettyBytes(codecInfo.size)}</div>
-              <div>
-                Codec: {codecInfo.codec_name} ({codecInfo.codec_long_name})
+            <div className="bg-gray-100 flex items-center gap-8 rounded p-8 text-sm text-gray-800">
+              <div className="w-24">
+                <img src={videoFile} />
               </div>
-              <div>
-                Format: {codecInfo.format_name} ({codecInfo.format_long_name})
+              <div className="gap-2 flex flex-col">
+                <div><span className="font-bold">{codecInfo.name}</span> ({prettyBytes(codecInfo.size)})</div>
+                {infos.map((line) => (
+                  <div className="flex">
+                    <div className="w-14  text-gray-600 ">{line[0]}:</div>{" "}
+                    <div className="">{line[1]}</div>
+                  </div>
+                ))}
               </div>
-              <div>Height: {codecInfo.height}</div>
-              <div>Width: {codecInfo.width}</div>
             </div>
-            <button onClick={() => setCodecInfo(null)}>
-              Check another one
-            </button>
+            <div className="flex justify-center">
+              <button
+                className="border p-2 mt-2 text-sm"
+                onClick={() => setCodecInfo(null)}
+              >
+                Check another one
+              </button>
+            </div>
           </div>
         )}
       </main>
