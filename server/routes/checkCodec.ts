@@ -1,15 +1,17 @@
 import { Request, Response } from "express";
-import ffprobe from "ffprobe-client";
+import ffmpeg from "fluent-ffmpeg";
 import { IncomingForm } from "formidable";
-import { mkdirp, mkdtemp, remove, rmdir } from "fs-extra";
+import { mkdtemp, remove, rmdir } from "fs-extra";
+const fs = require("fs").promises;
 import { tmpdir } from "os";
 import path from "path";
+import { promisify } from "util";
 import { CodecInfo } from "../types";
 import { slackNotify } from "../utils/slackNotify";
 
 export default async function checkCodec(req: Request, res: Response) {
   const tempPath = await mkdtemp(path.join(tmpdir(), "fileparty-"));
-  await mkdirp(tempPath);
+  // await mkdirp(tempPath);
   console.log("tempPath: ", tempPath);
 
   const form = new IncomingForm({
@@ -29,12 +31,29 @@ export default async function checkCodec(req: Request, res: Response) {
 
   // console.log('file: ', file);
 
-  const videoInfo: {
-    streams: any;
-    format: any;
-  } = await ffprobe(filePath);
+  const videoInfo: ffmpeg.FfprobeData = await promisify<
+    string,
+    ffmpeg.FfprobeData
+  >(ffmpeg.ffprobe)(filePath);
+
+  const screenshot = await new Promise((resolve) => {
+    ffmpeg(filePath)
+      .on("end", function () {
+        resolve(filePath);
+      })
+      .screenshot({
+        count: 1,
+        folder: tempPath,
+        filename: "screenshot",
+      });
+  });
+  console.log("tempPath: ", tempPath);
+
+  const screenshotPath = path.join(tempPath, "screenshot.png");
+  const image = await fs.readFile(screenshotPath, { encoding: "base64" });
 
   await remove(filePath);
+  await remove(screenshotPath);
   await rmdir(tempPath);
 
   const codecInfo: CodecInfo = {
@@ -48,11 +67,12 @@ export default async function checkCodec(req: Request, res: Response) {
     size: file.size,
   };
 
-  slackNotify("Someone checked codec", codecInfo)
+  slackNotify("Someone checked codec", codecInfo);
 
   res.json({
     fields,
     files,
     codecInfo,
+    image,
   });
 }

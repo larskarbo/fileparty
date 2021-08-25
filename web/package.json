@@ -69,6 +69,7 @@
     "react-google-charts": "^3.0.15",
     "react-helmet": "^6.1.0",
     "react-icons": "^4.1.0",
+    "react-markdown": "^7.0.0",
     "react-share": "^4.3.1",
     "react-twitter-share-link": "^1.2.1",
     "react-use": "^15.3.4",

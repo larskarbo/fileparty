@@ -27,6 +27,7 @@
     "express-async-errors": "^3.1.1",
     "express-session": "^1.17.2",
     "ffprobe-client": "^1.1.6",
+    "fluent-ffmpeg": "^2.1.2",
     "formidable": "^1.2.2",
     "fs-extra": "^10.0.0",
     "joi": "^17.4.0",
@@ -36,6 +37,7 @@
   "devDependencies": {
     "@types/body-parser": "^1.19.0",
     "@types/cookie-parser": "^1.4.2",
+    "@types/fluent-ffmpeg": "^2.1.18",
     "@types/formidable": "^1.2.3",
     "@types/fs-extra": "^9.0.11",
     "@types/jsonwebtoken": "^8.5.1",
