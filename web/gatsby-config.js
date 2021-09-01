@@ -36,23 +36,16 @@ module.exports = {
         ],
       },
     },
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        name: `images`,
-        path: `${__dirname}/src/images`,
-      },
-    },
+    // {
+    //   resolve: `gatsby-source-filesystem`,
+    //   options: {
+    //     name: `images`,
+    //     path: `${__dirname}/src/images`,
+    //   },
+    // },
     `gatsby-plugin-netlify`,
     `gatsby-transformer-sharp`, `gatsby-plugin-sharp`,
     `gatsby-plugin-react-helmet`,
-    {
-      resolve: `gatsby-plugin-canonical-urls`,
-      options: {
-        siteUrl: `https://fileparty.co`,
-        stripQueryString: true,
-      },
-    },
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
@@ -62,7 +55,7 @@ module.exports = {
         background_color: `#f7f0eb`,
         theme_color: `#a2466c`,
         display: `standalone`,
-        icon: `src/square_logo.svg`
+        icon: `static/square_logo.svg`
       },
     },
     {

@@ -1,12 +1,9 @@
-import { UserContext } from "../templates/FirebaseInit";
+import cryptoRandomString from "crypto-random-string";
+import firebase from "firebase/app";
+import { navigate } from "gatsby";
+import moment from "moment";
+import React, { useEffect } from "react";
 import Layout from "./Layout";
-import { graphql, useStaticQuery } from "gatsby";
-import React, { useContext, useState, useEffect } from "react";
-import GatsbyImage from "gatsby-image";
-import firebase from 'firebase/app';
-import { navigate } from 'gatsby';
-import cryptoRandomString from 'crypto-random-string';
-import moment from 'moment';
 
 function Create({ loading, user }) {
   useEffect(() => {
@@ -36,8 +33,7 @@ function Create({ loading, user }) {
             .set(firebase.database.ServerValue.increment(1));
         });
     }
-  }, [user])
-
+  }, [user]);
 
   return (
     <Layout>
@@ -47,7 +43,7 @@ function Create({ loading, user }) {
             "flex flex-col flex-grow-0 p-12 max-w-md  w-full rounded bg-white  border border-gray-300 shadow-lg "
           }
         >
-          {user ? "Creating..." : "Loading..." }
+          {user ? "Creating..." : "Loading..."}
         </div>
       </div>
     </Layout>

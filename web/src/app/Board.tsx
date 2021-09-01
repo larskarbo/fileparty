@@ -1,44 +1,22 @@
+import classNames from "classnames";
+import firebase from "firebase/app";
+import prettyBytes from "pretty-bytes";
 import React, {
   useCallback,
+  useContext,
   useEffect,
   useMemo,
-  useContext,
-  useRef,
   useState,
 } from "react";
-
 import { useDropzone } from "react-dropzone";
-import TorrentBoat from "./TorrentBoat";
-import useClipboard from "react-use-clipboard";
-
-import {
-  FaCheck,
-  FaCopy,
-  FaDownload,
-  FaFile,
-  FaLink,
-  FaLock,
-  FaUpload,
-} from "react-icons/fa";
-import useBeforeUnload from "use-before-unload";
-import firebase from "firebase/app";
-import TorrentAdder from "./TorrentAdder";
-import prettyBytes from "pretty-bytes";
-import Media from "./Media";
-import classNames from "classnames";
 import { AiOutlineBulb, AiOutlineFrown, AiOutlineSmile } from "react-icons/ai";
-import { useParams } from "@reach/router";
+import { FaCheck, FaCopy, FaDownload, FaLink, FaUpload } from "react-icons/fa";
+import useClipboard from "react-use-clipboard";
 import { UserContext } from "../templates/FirebaseInit";
 import Layout from "./Layout";
-import PresenterScreen from "./PresenterScreen";
+import Media from "./Media";
 import { client } from "./setUpClient";
-
-export interface File {
-  id: number;
-  name: string;
-  magnet: string;
-  torrent: any;
-}
+import TorrentBoat from "./TorrentBoat";
 
 function Board({ boardId }) {
   const { user } = useContext(UserContext);
@@ -84,14 +62,13 @@ function Board({ boardId }) {
 
     ref.child("file").on("value", (snapshot) => {
       const data = snapshot.val();
-      console.log('data: ', data);
+      console.log("data: ", data);
       // if(!data || data.magnet != file?.magnet){
       //   client.torrents.forEach(torrent => {
       //     client.remove(torrent.magnetURI)
       //   })
       //   setTorrent(null)
       // }
-
 
       setFile(data || {});
       setLoaded(true);
@@ -106,51 +83,54 @@ function Board({ boardId }) {
       const data = snapshot.val();
 
       setPlayingNow(data);
-
     });
     // return () => ref.off()
   }, [boardId]);
 
-  const onDrop = useCallback((acceptedFiles) => {
-    const rawFile = acceptedFiles[0]
-    client.torrents.forEach(torrent => {
-      client.remove(torrent.magnetURI)
-    })
-    setTorrent(null);
-    setAdding(rawFile.name);
-    // ref.child("file").set(null);
-    client.seed([rawFile], {
-      name: rawFile.name,
-      announce: ["wss://tracker.fileparty.co"]
-    }, function (torrent) {
-      setTorrent(torrent);
-      setDone(false)
-      ref.child("file").set({
-        name: rawFile.name,
-        magnet: torrent.magnetURI,
-        size: rawFile.size,
-        type: whichType(rawFile),
-        user: user.uid
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      const rawFile = acceptedFiles[0];
+      client.torrents.forEach((torrent) => {
+        client.remove(torrent.magnetURI);
       });
-      ref.child("playingNow").set({
-        state: "paused",
-        position: 0
-      });
+      setTorrent(null);
+      setAdding(rawFile.name);
+      // ref.child("file").set(null);
+      client.seed(
+        [rawFile],
+        {
+          name: rawFile.name,
+          announce: ["wss://tracker.fileparty.co"],
+        },
+        function (torrent) {
+          setTorrent(torrent);
+          setDone(false);
+          ref.child("file").set({
+            name: rawFile.name,
+            magnet: torrent.magnetURI,
+            size: rawFile.size,
+            type: whichType(rawFile),
+            user: user.uid,
+          });
+          ref.child("playingNow").set({
+            state: "paused",
+            position: 0,
+          });
 
-      setAdding(false);
-    }, function (torrent) {
-      torrent.on("error", function (err) {
-
-        setAdding(false);
-        alert(err.message)
-      })
-    })
-  }, [user]);
+          setAdding(false);
+        },
+        function (torrent) {
+          torrent.on("error", function (err) {
+            setAdding(false);
+            alert(err.message);
+          });
+        }
+      );
+    },
+    [user]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
-
-
-
 
   return (
     <Layout>
@@ -167,7 +147,7 @@ function Board({ boardId }) {
             className=" p-2 border-0 border-t border-b flex flex-grow"
             type=""
             value={link}
-            onChange={() => { }}
+            onChange={() => {}}
           />
           <button
             onClick={setCopied}
@@ -178,8 +158,8 @@ function Board({ boardId }) {
             {isCopied ? (
               <FaCheck className="ml-1 m-auto" />
             ) : (
-                <FaCopy className="ml-1 m-auto" />
-              )}
+              <FaCopy className="ml-1 m-auto" />
+            )}
           </button>
 
           <button
@@ -187,24 +167,25 @@ function Board({ boardId }) {
             className="ml-4 bg-white p-2 flex flex-row text-gray-500
               border-t border-b border-r border-l rounded"
           >
-            Select file {" "}
-            <FaUpload className="ml-1 m-auto" />
+            Select file <FaUpload className="ml-1 m-auto" />
           </button>
         </div>
 
         <div>
-          <a href="https://www.buymeacoffee.com/larskarbo" target="_blank"><img
-            className=""
-            src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" style={{
-              height: 60/1.7,
-              width: 217/1.7,
-              maxWidth: "auto"
-            }} /></a>
+          <a href="https://www.buymeacoffee.com/larskarbo" target="_blank">
+            <img
+              className=""
+              src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png"
+              alt="Buy Me A Coffee"
+              style={{
+                height: 60 / 1.7,
+                width: 217 / 1.7,
+                maxWidth: "auto",
+              }}
+            />
+          </a>
         </div>
-
-
       </div>
-
 
       <input {...getInputProps()} />
 
@@ -213,18 +194,21 @@ function Board({ boardId }) {
           "rounded bg-gray-200 relative flex flex-grow h-full border border-gray-300 shadow-lg group " +
           (isDragActive && "border-yellow-500 border-dashed")
         }
-
         {...getRootProps()}
         {...(file?.name && { onClick: undefined })}
       >
-
-        {file?.name ?
+        {file?.name ? (
           <>
-            <div className={"absolute z-20 left-2 bottom-10  transition-opacity duration-150 group-hover:opacity-100 " + (playingNow?.state == "playing" ? "opacity-0" : "opacity-100")}>
+            <div
+              className={
+                "absolute z-20 left-2 bottom-10  transition-opacity duration-150 group-hover:opacity-100 " +
+                (playingNow?.state == "playing" ? "opacity-0" : "opacity-100")
+              }
+            >
               <TorrentBoat
                 torrent={torrent?.magnetURI == file?.magnet ? torrent : null}
                 onFinish={() => {
-                  torrent.done = true
+                  torrent.done = true;
                   setTorrent(torrent);
                 }}
                 user={user}
@@ -234,26 +218,24 @@ function Board({ boardId }) {
                 setDone={setDone}
                 done={done}
                 onSetTorrent={(torrent) => {
-                  setDone(false)
+                  setDone(false);
                   setTorrent(torrent);
                 }}
                 onRemoveTorrent={() => {
-                  client.torrents.forEach(torrent => {
-                    client.remove(torrent.magnetURI)
-                  })
-                  setTorrent(null)
+                  client.torrents.forEach((torrent) => {
+                    client.remove(torrent.magnetURI);
+                  });
+                  setTorrent(null);
                 }}
                 onDelete={(torrent) => {
-                  client.torrents.forEach(torrent => {
-                    client.remove(torrent.magnetURI)
-                  })
-                  setTorrent(null)
+                  client.torrents.forEach((torrent) => {
+                    client.remove(torrent.magnetURI);
+                  });
+                  setTorrent(null);
                   ref.child("file").set(null);
                 }}
-                onPlay={() => {
-                }}
-                onUnPlay={() => {
-                }}
+                onPlay={() => {}}
+                onUnPlay={() => {}}
               />
             </div>
             <Media
@@ -271,25 +253,21 @@ function Board({ boardId }) {
               }}
             />
           </>
-          :
-
-          !isDragActive &&
-          <div className="absolute top-0 right-0 left-0 bottom-0 flex items-center justify-center">
-            <p>
-              Drag and drop <strong>images</strong>,{" "}
-              <strong>audio</strong>, <strong>video</strong> or other
-                files here
+        ) : (
+          !isDragActive && (
+            <div className="absolute top-0 right-0 left-0 bottom-0 flex items-center justify-center">
+              <p>
+                Drag and drop <strong>images</strong>, <strong>audio</strong>,{" "}
+                <strong>video</strong> or other files here
               </p>
-          </div>
-
-
-        }
+            </div>
+          )
+        )}
         {isDragActive && (
           <div className="absolute opacity-50 bg-yellow-300 top-0 right-0 left-0 bottom-0 flex items-center justify-center">
             <p>Drop the file to add it...</p>
           </div>
         )}
-
       </div>
 
       <div className="flex flex-col-reverse lg:flex-row justify-between pt-5 pb-6 ">
@@ -386,7 +364,11 @@ const Feeback = () => {
           value={text}
           onChange={(e) => setText(e.target.value)}
           className="w-full h-full pl-2 border-0 text-xs text-gray-600"
-          placeholder={first ? "Type instant feedback... (this is not chat!)" : "you@example.com"}
+          placeholder={
+            first
+              ? "Type instant feedback... (this is not chat!)"
+              : "you@example.com"
+          }
           type="text"
         />
         {text.length > 0 && isFocus && (
@@ -400,57 +382,6 @@ const Feeback = () => {
         )}
       </form>
     </div>
-  );
-};
-
-const PermSettings = () => {
-  const [permShow, setPermShow] = useState(false);
-  return (
-    <>
-      <button
-        onClick={() => setPermShow(!permShow)}
-        className="mb-4 focus:outline-none rounded-3xl flex flex-row items-center justify-center text-xs py-1 px-4 bg-blue-50 hover:bg-gray-200 transition duration-150"
-      >
-        <FaLock size={10} className="text-gray-500 mr-1" />{" "}
-        {permShow ? "Hide" : "Show"} permission settings
-      </button>
-      {permShow && (
-        <div className="border mb-3 border-gray-300 rounded-sm bg-gray-100 p-4">
-          <ul>
-            <li className="text-xs mb-3">
-              <span className="p-1 rounded font-bold text-x text-blue-500 bg-blue-200">
-                Anyone
-              </span>{" "}
-              can join
-            </li>
-            <li className="text-xs mb-3">
-              <span className="p-1 rounded font-bold text-x text-blue-500 bg-blue-200">
-                Anyone
-              </span>{" "}
-              can add files
-            </li>
-            <li className="text-xs mb-3">
-              <span className="p-1 rounded font-bold text-x text-blue-500 bg-blue-200">
-                Anyone
-              </span>{" "}
-              can download files
-            </li>
-            <li className="text-xs mb-3">
-              <span className="p-1 rounded font-bold text-x text-blue-500 bg-blue-200">
-                Anyone
-              </span>{" "}
-              can delete files
-            </li>
-            <li className="text-xs">
-              <span className="p-1 rounded font-bold text-x text-blue-500 bg-blue-200">
-                Anyone
-              </span>{" "}
-              can set playback
-            </li>
-          </ul>
-        </div>
-      )}
-    </>
   );
 };
 

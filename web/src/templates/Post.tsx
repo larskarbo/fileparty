@@ -2,7 +2,6 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from "rea
 import { graphql } from 'gatsby';
 import "./post.css"
 import { Link } from 'gatsby';
-import logo from "../app/logo.svg"
 import { Helmet } from 'react-helmet';
 
 
@@ -44,7 +43,7 @@ const Post = ({ data, location }) => {
           <div className="flex items-center">
 
             <Link to="/" className=" mr-4">
-              <img className="w-12 h-12" src={logo} />
+              <img className="w-12 h-12" src={"/logo.svg"} />
             </Link>
 
             <div className="text-2xl  ">

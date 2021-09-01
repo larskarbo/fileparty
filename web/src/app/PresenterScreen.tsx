@@ -1,7 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import Present from "./graphics/present.inline.svg";
 import canAutoPlayTest from 'can-autoplay';
-import Media from './Media';
+import { useEffect, useState } from 'react';
 
 function PresenterScreen({ isDragActive, ...props }) {
   const [canAutoPlay, setCanAutoPlay] = useState(false)

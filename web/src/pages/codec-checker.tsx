@@ -7,7 +7,6 @@ import { CodecInfo } from "../../../server/types";
 import { SERVER_BASE } from "../app/utils/request";
 import videoFile from "../app/graphics/video-file.svg";
 import { Link } from "@reach/router";
-import logo from "../app/logo.svg";
 import SEO from "../templates/seo";
 
 export default function CodecChecker() {
@@ -72,7 +71,7 @@ export default function CodecChecker() {
       <div className="max-w-screen-md w-full mb-12">
         <div className="flex items-center">
           <Link to="/" className=" mr-4">
-            <img className="w-12 h-12" src={logo} />
+            <img className="w-12 h-12" src={"/logo.svg"} />
           </Link>
 
           <div className="text-2xl  font-light ">FileParty</div>

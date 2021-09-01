@@ -1,25 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
-import {
-  FaArrowDown,
-  FaArrowUp,
-  FaCircle,
-  FaDownload,
-  FaSpinner,
-  FaUpload,
-} from "react-icons/fa";
-import { debounce } from "lodash";
-import { HiDotsVertical } from "react-icons/hi";
-import { AiFillWarning, AiOutlineReload } from "react-icons/ai";
-import prettyBytes from "pretty-bytes";
-import audio from "./graphics/audio-file.svg";
-import video from "./graphics/video-file.svg";
-import image from "./graphics/image-file.svg";
-import file from "./graphics/file-file.svg";
-// import sendToPresenter from "./graphics/send-to-presenter.svg";
-import SendToPresenter from "./graphics/send-to-presenter.inline.svg";
 import classNames from "classnames";
-
+import prettyBytes from "pretty-bytes";
+import React, { useEffect, useRef, useState } from "react";
+import { AiFillWarning } from "react-icons/ai";
+import { FaArrowDown, FaCircle, FaDownload } from "react-icons/fa";
+import { HiDotsVertical } from "react-icons/hi";
 import useClickOutside from "use-click-outside";
+import audio from "./graphics/audio-file.svg";
+import file from "./graphics/file-file.svg";
+import image from "./graphics/image-file.svg";
+import video from "./graphics/video-file.svg";
 
 const icons = {
   audio,
