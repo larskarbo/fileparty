@@ -93,6 +93,7 @@ export default function CodecChecker() {
                 (isDragActive ? "bg-yellow-800 border-dashed" : "bg-gray-600")
               }
               {...(uploading ? null : getRootProps())}
+              onClick={() => {}}
             >
               {uploading ? (
                 <div className="flex flex-col items-center justify-center h-full">
