@@ -25,6 +25,7 @@ function Board({ boardId }) {
   const [uploadSpeed, setUploadSpeed] = useState(0);
   const [done, setDone] = useState(false);
 
+
   useEffect(() => {
     if (!client) {
       return;
@@ -189,11 +190,15 @@ function Board({ boardId }) {
 
       <input {...getInputProps()} />
 
+      
       <div
         className={
-          "rounded bg-gray-200 relative flex flex-grow h-full border border-gray-300 shadow-lg group " +
+          "rounded bg-gray-200 relative flex flex-grow border border-gray-300 shadow-lg group " +
           (isDragActive && "border-yellow-500 border-dashed")
         }
+        style={{
+          height: 400,
+        }}
         {...getRootProps()}
         {...(file?.name && { onClick: undefined })}
       >
@@ -257,8 +262,7 @@ function Board({ boardId }) {
           !isDragActive && (
             <div className="absolute top-0 right-0 left-0 bottom-0 flex items-center justify-center">
               <p>
-                Drag and drop <strong>images</strong>, <strong>audio</strong>,{" "}
-                <strong>video</strong> or other files here
+                Drag and drop a <strong>video</strong> file here
               </p>
             </div>
           )
@@ -269,6 +273,9 @@ function Board({ boardId }) {
           </div>
         )}
       </div>
+      
+      
+      
 
       <div className="flex flex-col-reverse lg:flex-row justify-between pt-5 pb-6 ">
         <div className=" ml-2 text-xs pr-4 text-gray-700 opacity-80">

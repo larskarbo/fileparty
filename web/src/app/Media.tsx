@@ -7,19 +7,12 @@ import Timeline from "./Timeline/Timeline";
 type mediaType =
   | "no-media"
   | "video"
-  | "image"
-  | "audio"
-  | "file"
   | "not-loaded";
 function Media({ onSetPlayingNow, adding, playingNow, torrent, file, done }) {
-  const imageRef = useRef();
   const videoRef = useRef();
-  const audioRef = useRef();
   const contRef = useRef();
   // const pdfRef = useRef();
   const refs = {
-    image: imageRef,
-    audio: audioRef,
     video: videoRef,
     // pdf: pdfRef
   };
@@ -167,29 +160,6 @@ function Media({ onSetPlayingNow, adding, playingNow, torrent, file, done }) {
           <div className="flex justify-center"></div>
           <div>Waiting for host to add files...</div>
         </div>
-        <div
-          className={classNames(
-            mediaType != "file" && "hidden",
-            "font-light text-xs text-gray-600 text-center"
-          )}
-        >
-          <div className="flex justify-center"></div>
-          <p className="font-bold">
-            This file can't be previewed, but you can download it.
-          </p>
-          <p className="mt-2">
-            Tip: Video files with .mp4 extension can be streamed, even with file
-            sizes more than 200mb
-          </p>
-        </div>
-
-        <img
-          ref={imageRef}
-          className={classNames(
-            mediaType != "image" && "hidden",
-            " max-h-full max-w-full w-auto"
-          )}
-        />
         <video
           controls={true}
           ref={videoRef}
@@ -216,15 +186,11 @@ function Media({ onSetPlayingNow, adding, playingNow, torrent, file, done }) {
             Adding {adding}...
           </div>
         )}
-        <audio
-          ref={audioRef}
-          className={classNames(mediaType != "audio" && "hidden", "")}
-        />
       </div>
 
       <div className="h-8 bg-gray-800 border-t border-gray-500">
         <div className="h-full w-full flex flex-row ">
-          {(mediaType == "video" || mediaType == "audio") && (
+          {(mediaType == "video") && (
             <Timeline
               element={element}
               onPlay={onPlay}
