@@ -5,6 +5,7 @@ import { useDropzone } from "react-dropzone";
 import { FaUpload } from "react-icons/fa";
 import { CodecInfo } from "../../../server/types";
 import { SERVER_BASE } from "../app/utils/request";
+// @ts-ignore
 import videoFile from "../app/graphics/video-file.svg";
 import { Link } from "@reach/router";
 import SEO from "../templates/seo";
@@ -124,7 +125,13 @@ export default function CodecChecker() {
           <div>
             <div className="bg-gray-100 flex items-center gap-8 rounded p-8 text-sm text-gray-800">
               <div className="w-24">
-                <img src={imageBase64 ? `data:image/jpeg;charset=utf-8;base64,${imageBase64}` : videoFile} />
+                <img
+                  src={
+                    imageBase64
+                      ? `data:image/jpeg;charset=utf-8;base64,${imageBase64}`
+                      : videoFile
+                  }
+                />
               </div>
               <div className="gap-2 flex flex-col">
                 <div>

@@ -10,7 +10,7 @@ type mediaType =
   | "not-loaded";
 function Media({ onSetPlayingNow, adding, playingNow, torrent, file, done }) {
   const videoRef = useRef();
-  const contRef = useRef();
+  const contRef = useRef(null);
   // const pdfRef = useRef();
   const refs = {
     video: videoRef,
@@ -46,7 +46,7 @@ function Media({ onSetPlayingNow, adding, playingNow, torrent, file, done }) {
       console.log("TODO render file");
     } else {
       if (file.size > 200000000 && !file.name.includes(".mp4")) {
-        return setMediaType("file");
+        // return setMediaType("file");
       }
       const element = refs[file.type].current;
       render.render(

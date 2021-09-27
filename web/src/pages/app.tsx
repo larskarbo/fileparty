@@ -17,7 +17,9 @@ function App() {
       </Helmet>
       <SEO title="FileParty" />
       <Router basepath="/">
+        {/* @ts-ignore */}
         <Create user={user} loading={loading} path="/app/create" />
+        {/* @ts-ignore */}
         <Board path="/app/:boardId" />
       </Router>
     </>

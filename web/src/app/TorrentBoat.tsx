@@ -5,9 +5,13 @@ import { AiFillWarning } from "react-icons/ai";
 import { FaArrowDown, FaCircle, FaDownload } from "react-icons/fa";
 import { HiDotsVertical } from "react-icons/hi";
 import useClickOutside from "use-click-outside";
+// @ts-ignore
 import audio from "./graphics/audio-file.svg";
+// @ts-ignore
 import file from "./graphics/file-file.svg";
+// @ts-ignore
 import image from "./graphics/image-file.svg";
+// @ts-ignore
 import video from "./graphics/video-file.svg";
 
 const icons = {
@@ -56,6 +60,7 @@ function TorrentBoat({
       },
       function (torrent) {
         torrent.on("done", () => {
+          // @ts-ignore
           window.plausible("torrent-done");
         });
 
@@ -68,6 +73,7 @@ function TorrentBoat({
     if (startedDownloading && progress == 0) {
       const timeout = setTimeout(() => {
         setWarningStale(true);
+        // @ts-ignore
         window.plausible("torrent-stale");
       }, 8000);
       return () => clearTimeout(timeout);

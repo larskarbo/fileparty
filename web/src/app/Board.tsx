@@ -246,7 +246,6 @@ function Board({ boardId }) {
             <Media
               done={done}
               adding={adding}
-              isDragActive={isDragActive}
               playingNow={playingNow}
               torrent={torrent?.magnetURI == file?.magnet ? torrent : null}
               file={file}
