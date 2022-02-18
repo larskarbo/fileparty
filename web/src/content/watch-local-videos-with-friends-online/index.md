@@ -4,7 +4,6 @@ excerpt: No excerpt
 hero: ./5-ways-to-watch-videos-with-friends.png
 date: 2020-12-28
 ---
-
 Now, more than ever, it's important to connect and keep in touch with friends. Sometimes you want to watch local videos together with them, but what if they are on the other side of the world? Here are some ways you can stream your local files in sync with your friends.
 
 PS: we are not talking about watching Netflix, Hulu or Disney+ together. We are talking about files, mp4, mov, etc...
@@ -25,19 +24,25 @@ Syncplay is an application specificly made for this purpose. As long as everyone
 
 However, you will need to [download the application] (available for Mac, Windows and Linux), and also [syncronize the video file] manually with everyone.
 
-### 3. Upload files to YouTube
+### 3. WATCHTOWER LOCAL
+
+[Watchtower Local](https://www.microsoft.com/en-us/p/watchtower-local/9pdrbh3qdww3) is a paid but more user friendly alternative to Syncplay and available in the Microsoft Store. Just create a room and make sure everyone in it has the same file with the same filename.
+
+The video will be played locally and Watchtower Local takes care of syncing the built-in player and playlist with the others!
+
+### 4. Upload files to YouTube
 
 This method seems weird, but it actually works. Go to YouTube and upload your movie file. Set it to unlisted. Then use one of the many services for [watching youtube together](https://www.makeuseof.com/tag/watch-youtube-together/), and enjoy.
 
 Cons: Youtube might take parts of the video if it gets detected as privacy.
 
-### 4. Good Old Telephone Method
+### 5. Good Old Telephone Method
 
 Send the video file to everyone, then call them. "3..2..1.. play!". Tadaa, everyone is in sync!
 
 You still have the problem with syncing the file to everyone though.
 
-### 5. FileParty
+### 6. FileParty
 
 [FileParty](/) is the easiest way to watch local files in sync with friends. It handles file syncing and plays the file easily and syncronised for everyone. It is browser based and works in any browser!
 
