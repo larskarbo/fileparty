@@ -9,7 +9,8 @@
     "test": "node_modules/.bin/ava _tests/**/*.test.js --verbose",
     "test:watch": "node_modules/.bin/ava --verbose --watch",
     "unused-exports": "ts-unused-exports tsconfig.json --exitWithCount",
-    "unused-deps": "depcheck"
+    "unused-deps": "depcheck",
+    "pm2-start": "pm2 list && pm2-runtime start ecosystem.config"
   },
   "dependencies": {
     "@types/axios": "^0.14.0",
@@ -32,7 +33,8 @@
     "fs-extra": "^10.0.0",
     "joi": "^17.4.0",
     "joi-extract-type": "^15.0.8",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "pm2": "^5.2.2"
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.0",
