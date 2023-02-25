@@ -10,7 +10,7 @@
     "test:watch": "node_modules/.bin/ava --verbose --watch",
     "unused-exports": "ts-unused-exports tsconfig.json --exitWithCount",
     "unused-deps": "depcheck",
-    "pm2-start": "pm2 list && pm2-runtime start ecosystem.config"
+    "pm2-start": "pm2 list && pm2-runtime start ecosystem.config.js"
   },
   "dependencies": {
     "@types/axios": "^0.14.0",
